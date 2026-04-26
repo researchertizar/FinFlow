@@ -27,54 +27,7 @@ finflow/
 ```
 
 ---
-
-## Quick Start
-
-### Option 1 — Open directly (simplest)
-
-```bash
-# Just double-click finflow.html, or:
-open finflow.html
-```
-
-Works in Chrome, Edge, Firefox, Safari.  
-PWA install and service worker require HTTP (see Option 2).
-
-### Option 2 — Local server (full PWA features)
-
-```bash
-# Python 3
-python -m http.server 8080
-
-# Node.js
-npx serve .
-
-# Then open:
-http://localhost:8080/finflow.html
-```
-
----
-
-## Deploy to GitHub Pages (3 steps)
-
-**Step 1** — Create a new repository on [github.com/new](https://github.com/new)
-
-**Step 2** — Upload all files to the repository root:
-```
-finflow.html  styles.css  app.js  sw.js  manifest.json
-index.html    404.html    .nojekyll
-```
-
-**Step 3** — Enable GitHub Pages:  
-`Repository Settings → Pages → Source: main branch → Save`
-
-Your app will be live at:
-```
-https://YOUR-USERNAME.github.io/REPO-NAME/finflow.html
-```
-
 > **Tip:** Users can install it as a PWA app directly from the browser once it's live on HTTPS.
-
 ---
 
 ## Features
