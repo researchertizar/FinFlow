@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
@@ -9,889 +10,1070 @@
   <meta name="apple-mobile-web-app-title" content="FinFlow">
   <meta name="theme-color" content="#0d0d14" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f5f5f0" media="(prefers-color-scheme: light)">
-  <meta name="description" content="FinFlow — Personal Finance OS. Local-first, offline-ready. No sign-up, no cloud, no tracking.">
+  <meta name="description"
+    content="FinFlow — Personal Finance OS. Local-first, offline-ready. No sign-up, no cloud, no tracking.">
   <meta name="author" content="Researcher Tizar">
 
   <title>FinFlow — Personal Finance</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%234f46e5'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EF%3C/text%3E%3C/svg%3E">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%234f46e5'/%3E%3Ctext x='90' y='125' font-size='96' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EF%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%234f46e5'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EF%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%234f46e5'/%3E%3Ctext x='90' y='125' font-size='96' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EF%3C/text%3E%3C/svg%3E">
 
   <!-- PWA Manifest (inline blob — works on file:// and HTTP) -->
   <link rel="manifest" id="pwa-manifest">
   <script>
-(function(){
-  try {
-    var loc = location.href.replace(/[?#].*$/,'');
-    var base = loc.substring(0, loc.lastIndexOf('/') + 1);
-    var m = {
-      id:'finflow-v3', name:'FinFlow — Personal Finance', short_name:'FinFlow',
-      description:'Personal Finance OS. Local-first, offline-ready, zero tracking.',
-      start_url: loc, scope: base, display:'standalone',
-      display_override:['standalone','minimal-ui'],
-      background_color:'#0d0d14', theme_color:'#4f46e5',
-      orientation:'portrait-primary',
-      categories:['finance','productivity'],
-      lang:'en', dir:'ltr',
-      prefer_related_applications: false,
-      orientation:'portrait-primary',
-      icons:[
-        {src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='44' fill='%234f46e5'/%3E%3Ctext x='96' y='135' font-size='108' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EW%3C/text%3E%3C/svg%3E",sizes:'192x192',type:'image/svg+xml'},
-        {src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Ctext x='256' y='365' font-size='290' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EW%3C/text%3E%3C/svg%3E",sizes:'512x512',type:'image/svg+xml',purpose:'any maskable'}
-      ]
-    };
-    var blob = new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
-    var link = document.getElementById('pwa-manifest');
-    link.href = URL.createObjectURL(blob);
-    link.type = 'application/manifest+json';
-    // Register external SW when served over HTTP
-    if (location.protocol !== 'file:' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js', {scope:'./'}).catch(function(){});
-    }
-  } catch(e) {}
-})();
-</script>
+    (function () {
+      try {
+        var loc = location.href.replace(/[?#].*$/, '');
+        var base = loc.substring(0, loc.lastIndexOf('/') + 1);
+        var m = {
+          id: 'finflow-v3', name: 'FinFlow — Personal Finance', short_name: 'FinFlow',
+          description: 'Personal Finance OS. Local-first, offline-ready, zero tracking.',
+          start_url: loc, scope: base, display: 'standalone',
+          display_override: ['standalone', 'minimal-ui'],
+          background_color: '#0d0d14', theme_color: '#4f46e5',
+          orientation: 'portrait-primary',
+          categories: ['finance', 'productivity'],
+          lang: 'en', dir: 'ltr',
+          prefer_related_applications: false,
+          orientation: 'portrait-primary',
+          icons: [
+            { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='44' fill='%234f46e5'/%3E%3Ctext x='96' y='135' font-size='108' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EW%3C/text%3E%3C/svg%3E", sizes: '192x192', type: 'image/svg+xml' },
+            { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Ctext x='256' y='365' font-size='290' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EW%3C/text%3E%3C/svg%3E", sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+          ]
+        };
+        var blob = new Blob([JSON.stringify(m)], { type: 'application/manifest+json' });
+        var link = document.getElementById('pwa-manifest');
+        link.href = URL.createObjectURL(blob);
+        link.type = 'application/manifest+json';
+        // Register external SW when served over HTTP
+        if (location.protocol !== 'file:' && 'serviceWorker' in navigator) {
+          navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function () { });
+        }
+      } catch (e) { }
+    })();
+  </script>
 
   <!-- External deps (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
 
   <!-- App styles -->
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-<!-- TOASTS -->
-<div id="toasts"></div>
+  <!-- TOASTS -->
+  <div id="toasts"></div>
 
-<!-- BANNERS -->
-<div id="offline-banner">
-  <i class="fa-solid fa-wifi-slash"></i>
-  <span>You're offline — all data is saved on your device</span>
-</div>
-<div id="install-banner">
-  <i class="fa-solid fa-rocket" style="color:var(--accent-h);font-size:15px;flex-shrink:0"></i>
-  <span style="flex:1;font-size:13px">Add <strong>Wallet</strong> to your home screen for the best experience</span>
-  <button class="btn-p sm" onclick="installPWA()">Install</button>
-  <button style="background:none;border:none;color:var(--fg3);cursor:pointer;padding:4px 8px;font-size:15px;line-height:1" onclick="document.getElementById('install-banner').classList.remove('show')">✕</button>
-</div>
-
-<div id="app">
-
-<!-- ══ SIDEBAR ══ -->
-<div id="sidebar">
-  <div class="sb-brand">
-    <div class="sb-logo">W</div>
-    <div class="sb-brand-text">
-      <h1>Wallet</h1>
-      <p>Your Money</p>
-    </div>
+  <!-- BANNERS -->
+  <div id="offline-banner">
+    <i class="fa-solid fa-wifi-slash"></i>
+    <span>You're offline — all data is saved on your device</span>
   </div>
-  <nav>
-    <div class="nav-sec">Overview</div>
-    <div class="ni on" onclick="nav('dashboard')" data-view="dashboard"><i class="fa-solid fa-house ni-ic"></i><span class="ni-lbl">Home</span></div>
-    <div class="ni" onclick="nav('insights')" data-view="insights"><i class="fa-solid fa-lightbulb ni-ic"></i><span class="ni-lbl">Insights</span><span class="ni-new">AI</span></div>
-    <div class="ni" onclick="nav('reports')" data-view="reports"><i class="fa-solid fa-chart-line ni-ic"></i><span class="ni-lbl">Reports</span></div>
-    <div class="nav-sec">Money</div>
-    <div class="ni" onclick="nav('transactions')" data-view="transactions"><i class="fa-solid fa-list-ul ni-ic"></i><span class="ni-lbl">Transactions</span></div>
-    <div class="ni" onclick="nav('accounts')" data-view="accounts"><i class="fa-solid fa-vault ni-ic"></i><span class="ni-lbl">Accounts</span></div>
-    <div class="ni" onclick="nav('budget')" data-view="budget"><i class="fa-solid fa-scale-balanced ni-ic"></i><span class="ni-lbl">Budgets</span></div>
-    <div class="nav-sec">Planning</div>
-    <div class="ni" onclick="nav('goals')" data-view="goals"><i class="fa-solid fa-bullseye ni-ic"></i><span class="ni-lbl">Goals</span></div>
-    <div class="ni" onclick="nav('recurring')" data-view="recurring"><i class="fa-solid fa-rotate ni-ic"></i><span class="ni-lbl">Recurring</span></div>
-    <div class="nav-sec">Setup</div>
-    <div class="ni" onclick="nav('categories')" data-view="categories"><i class="fa-solid fa-tags ni-ic"></i><span class="ni-lbl">Categories</span></div>
-    <div class="ni" onclick="nav('settings')" data-view="settings"><i class="fa-solid fa-gear ni-ic"></i><span class="ni-lbl">Settings</span></div>
-  </nav>
-  <div class="sb-footer">
-    <div class="sb-storage">
-      <div class="sb-dot"></div>
-      <div style="min-width:0">
-        <div style="font-size:12px;font-weight:600;color:var(--fg2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Private · On Device</div>
-        <div id="storage-sz" style="font-size:10px;color:var(--fg3);margin-top:1px">Calculating…</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Sidebar mobile overlay -->
-<div id="sb-overlay" onclick="closeMobileSidebar()"></div>
-
-<!-- ══ MAIN ══ -->
-<div id="mw">
-
-  <!-- TOPBAR -->
-  <div id="topbar">
-    <div class="tb-left">
-      <button class="tb-btn" id="tb-back-btn" onclick="goBack()" style="display:none" aria-label="Go back">
-        <i class="fa-solid fa-arrow-left"></i>
-      </button>
-      <button class="tb-btn" id="tb-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-      <span id="pg-title">Home</span>
-      <!-- pg-sub: required by engine, kept hidden -->
-      <span id="pg-sub" style="display:none"></span>
-    </div>
-    <div class="tb-right">
-      <!-- Search: desktop only (hidden on mobile via CSS) -->
-      <div class="gsearch-wrap" style="position:relative">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="global-search" placeholder="Search… (⌘K)" autocomplete="off">
-        <div class="search-results" id="search-results" style="display:none;min-width:280px"></div>
-      </div>
-      <!-- Month nav: desktop only -->
-      <div class="month-nav">
-        <button onclick="changeMonth(-1)" aria-label="Previous month"><i class="fa-solid fa-chevron-left"></i></button>
-        <span id="mlbl"></span>
-        <button onclick="changeMonth(1)" aria-label="Next month"><i class="fa-solid fa-chevron-right"></i></button>
-      </div>
-      <button class="tb-btn" onclick="toggleTheme()" title="Toggle theme (T)">
-        <i class="fa-solid fa-circle-half-stroke"></i>
-      </button>
-      <button class="tb-btn" id="notif-btn" onclick="openNotifPanel()" aria-label="Alerts">
-        <i class="fa-solid fa-bell"></i>
-        <span class="notif-dot" id="notif-dot" style="display:none"></span>
-      </button>
-      <button class="btn-p sm" onclick="openTxM()">
-        <i class="fa-solid fa-plus"></i> Add
-      </button>
-    </div>
+  <div id="install-banner">
+    <i class="fa-solid fa-rocket" style="color:var(--accent-h);font-size:15px;flex-shrink:0"></i>
+    <span style="flex:1;font-size:13px">Add <strong>Wallet</strong> to your home screen for the best experience</span>
+    <button class="btn-p sm" onclick="installPWA()">Install</button>
+    <button
+      style="background:none;border:none;color:var(--fg3);cursor:pointer;padding:4px 8px;font-size:15px;line-height:1"
+      onclick="document.getElementById('install-banner').classList.remove('show')">✕</button>
   </div>
 
-  <!-- CONTENT -->
-  <div id="content">
+  <div id="app">
 
-    <!-- ══ DASHBOARD ══ -->
-    <div class="view active" id="view-dashboard">
-
-      <!-- Mobile month nav (engine updates mobile-mlbl) -->
-      <div class="mobile-month-nav">
-        <button onclick="changeMonth(-1)" aria-label="Previous month"><i class="fa-solid fa-chevron-left"></i></button>
-        <span id="mobile-mlbl" style="font-size:14px;font-weight:600"></span>
-        <button onclick="changeMonth(1)" aria-label="Next month"><i class="fa-solid fa-chevron-right"></i></button>
-      </div>
-
-      <!-- Quick action buttons -->
-      <div class="quick-btns">
-        <button class="qb primary" onclick="openTxM('expense')"><i class="fa-solid fa-minus"></i> Spent Money</button>
-        <button class="qb" onclick="openTxM('income')" style="color:var(--green);border-color:rgba(34,197,94,.25)"><i class="fa-solid fa-plus" style="color:var(--green)"></i> Got Paid</button>
-        <button class="qb" onclick="openTxM('transfer')" style="color:var(--accent-h);border-color:var(--ac2)"><i class="fa-solid fa-right-left" style="color:var(--accent-h)"></i> Move Money</button>
-        <button class="qb" onclick="nav('reports')" style="margin-left:auto"><i class="fa-solid fa-chart-bar"></i> Reports</button>
-      </div>
-
-      <!-- Hero — engine sets #nw-val and #nw-delta -->
-      <div class="hero-wrap">
-        <div class="hero-label">Your Total Balance</div>
-        <div id="nw-val">—</div>
-        <div class="hero-pills" style="margin-top:12px">
-          <div class="hero-pill"><i class="fa-solid fa-calendar-check"></i> <span id="nw-month" style="display:none"></span>This month</div>
-          <div id="nw-delta" style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;backdrop-filter:blur(4px)"></div>
-          <div class="hero-pill"><i class="fa-solid fa-shield-check" style="color:rgba(255,255,255,.8)"></i> Data on device</div>
+    <!-- ══ SIDEBAR ══ -->
+    <div id="sidebar">
+      <div class="sb-brand" onclick="nav('dashboard')" title="Go to Dashboard" style="cursor:pointer">
+        <div class="sb-logo" aria-label="FinFlow logo">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <path d="M6 10h24M6 18h16M6 26h20" stroke="white" stroke-width="3" stroke-linecap="round" />
+            <circle cx="28" cy="26" r="5" fill="rgba(255,255,255,.25)" stroke="white" stroke-width="2" />
+            <path d="M26 26l1.5 1.5L30 24" stroke="white" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
         </div>
+        <div class="sb-brand-text">
+          <h1>FinFlow</h1>
+          <p>by <span class="sb-dev">Researcher Tizar</span></p>
+        </div>
+        <div class="sb-brand-badge" title="Production Release">v3</div>
       </div>
-
-      <!-- Stats grid — engine renders stat cards here -->
-      <div class="g4" id="stats-grid" style="margin-bottom:14px"></div>
-
-      <!-- Charts -->
-      <div class="g2" style="margin-bottom:12px">
-        <div class="cd">
-          <div class="cd-hd">
-            <div class="cd-title"><i class="fa-solid fa-chart-pie"></i> Where Money Goes</div>
+      <nav>
+        <div class="nav-sec">Overview</div>
+        <div class="ni on" onclick="nav('dashboard')" data-view="dashboard"><i class="fa-solid fa-house ni-ic"></i><span
+            class="ni-lbl">Home</span></div>
+        <div class="ni" onclick="nav('insights')" data-view="insights"><i class="fa-solid fa-lightbulb ni-ic"></i><span
+            class="ni-lbl">Insights</span><span class="ni-new">AI</span></div>
+        <div class="ni" onclick="nav('reports')" data-view="reports"><i class="fa-solid fa-chart-line ni-ic"></i><span
+            class="ni-lbl">Reports</span></div>
+        <div class="nav-sec">Money</div>
+        <div class="ni" onclick="nav('transactions')" data-view="transactions"><i
+            class="fa-solid fa-list-ul ni-ic"></i><span class="ni-lbl">Transactions</span></div>
+        <div class="ni" onclick="nav('accounts')" data-view="accounts"><i class="fa-solid fa-vault ni-ic"></i><span
+            class="ni-lbl">Accounts</span></div>
+        <div class="ni" onclick="nav('budget')" data-view="budget"><i class="fa-solid fa-scale-balanced ni-ic"></i><span
+            class="ni-lbl">Budgets</span></div>
+        <div class="nav-sec">Planning</div>
+        <div class="ni" onclick="nav('goals')" data-view="goals"><i class="fa-solid fa-bullseye ni-ic"></i><span
+            class="ni-lbl">Goals</span></div>
+        <div class="ni" onclick="nav('recurring')" data-view="recurring"><i class="fa-solid fa-rotate ni-ic"></i><span
+            class="ni-lbl">Recurring</span></div>
+        <div class="nav-sec">Setup</div>
+        <div class="ni" onclick="nav('categories')" data-view="categories"><i class="fa-solid fa-tags ni-ic"></i><span
+            class="ni-lbl">Categories</span></div>
+        <div class="ni" onclick="nav('settings')" data-view="settings"><i class="fa-solid fa-gear ni-ic"></i><span
+            class="ni-lbl">Settings</span></div>
+      </nav>
+      <div class="sb-footer">
+        <div class="sb-storage">
+          <div class="sb-dot"></div>
+          <div style="min-width:0">
+            <div
+              style="font-size:12px;font-weight:600;color:var(--fg2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+              Private · On Device</div>
+            <div id="storage-sz" style="font-size:10px;color:var(--fg3);margin-top:1px">Calculating…</div>
           </div>
-          <div class="chart-wrap"><canvas id="c-donut"></canvas></div>
-          <div id="donut-legend" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px"></div>
         </div>
-        <div class="cd">
-          <div class="cd-hd">
-            <div class="cd-title"><i class="fa-solid fa-chart-area"></i> Last 6 Months</div>
+      </div>
+    </div>
+
+    <!-- Sidebar mobile overlay -->
+    <div id="sb-overlay" onclick="closeMobileSidebar()"></div>
+
+    <!-- ══ MAIN ══ -->
+    <div id="mw">
+
+      <!-- TOPBAR -->
+      <div id="topbar">
+        <div class="tb-left">
+          <button class="tb-btn" id="tb-back-btn" onclick="goBack()" style="display:none" aria-label="Go back">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button class="tb-btn" id="tb-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <span id="pg-title">Home</span>
+          <!-- pg-sub: required by engine, kept hidden -->
+          <span id="pg-sub" style="display:none"></span>
+        </div>
+        <div class="tb-right">
+          <!-- Search: desktop only (hidden on mobile via CSS) -->
+          <div class="gsearch-wrap" style="position:relative">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="global-search" placeholder="Search… (⌘K)" autocomplete="off">
+            <div class="search-results" id="search-results" style="display:none;min-width:280px"></div>
           </div>
-          <div class="chart-wrap"><canvas id="c-flow"></canvas></div>
+          <!-- Month nav: desktop only -->
+          <div class="month-nav">
+            <button onclick="changeMonth(-1)" aria-label="Previous month"><i
+                class="fa-solid fa-chevron-left"></i></button>
+            <span id="mlbl"></span>
+            <button onclick="changeMonth(1)" aria-label="Next month"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <button class="tb-btn" onclick="toggleTheme()" title="Toggle theme (T)">
+            <i class="fa-solid fa-circle-half-stroke"></i>
+          </button>
+          <button class="tb-btn" id="notif-btn" onclick="openNotifPanel()" aria-label="Alerts">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notif-dot" id="notif-dot" style="display:none"></span>
+          </button>
+          <button class="btn-p sm" onclick="openTxM()">
+            <i class="fa-solid fa-plus"></i> Add
+          </button>
         </div>
       </div>
 
-      <!-- Recent transactions + budget/goals -->
-      <div class="g2">
-        <div class="cd">
-          <div class="cd-hd">
-            <div class="cd-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</div>
-            <button class="btn sm" onclick="nav('transactions')">See All</button>
+      <!-- CONTENT -->
+      <div id="content">
+
+        <!-- ══ DASHBOARD ══ -->
+        <div class="view active" id="view-dashboard">
+
+          <!-- Mobile month nav (engine updates mobile-mlbl) -->
+          <div class="mobile-month-nav">
+            <button onclick="changeMonth(-1)" aria-label="Previous month"><i
+                class="fa-solid fa-chevron-left"></i></button>
+            <span id="mobile-mlbl" style="font-size:14px;font-weight:600"></span>
+            <button onclick="changeMonth(1)" aria-label="Next month"><i class="fa-solid fa-chevron-right"></i></button>
           </div>
-          <div id="recent-tx-list"></div>
-        </div>
-        <div>
-          <div class="cd" style="margin-bottom:12px">
-            <div class="cd-hd">
-              <div class="cd-title"><i class="fa-solid fa-scale-balanced"></i> Budget Status</div>
-              <button class="btn sm" onclick="nav('budget')">Manage</button>
+
+          <!-- Quick action buttons -->
+          <div class="quick-btns">
+            <button class="qb primary" onclick="openTxM('expense')"><i class="fa-solid fa-minus"></i> Spent
+              Money</button>
+            <button class="qb" onclick="openTxM('income')"
+              style="color:var(--green);border-color:rgba(34,197,94,.25)"><i class="fa-solid fa-plus"
+                style="color:var(--green)"></i> Got Paid</button>
+            <button class="qb" onclick="openTxM('transfer')" style="color:var(--accent-h);border-color:var(--ac2)"><i
+                class="fa-solid fa-right-left" style="color:var(--accent-h)"></i> Move Money</button>
+            <button class="qb" onclick="nav('reports')" style="margin-left:auto"><i class="fa-solid fa-chart-bar"></i>
+              Reports</button>
+          </div>
+
+          <!-- Hero — engine sets #nw-val and #nw-delta -->
+          <div class="hero-wrap">
+            <div class="hero-label">Your Total Balance</div>
+            <div id="nw-val">—</div>
+            <div class="hero-pills" style="margin-top:12px">
+              <div class="hero-pill"><i class="fa-solid fa-calendar-check"></i> <span id="nw-month"
+                  style="display:none"></span>This month</div>
+              <div id="nw-delta"
+                style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;backdrop-filter:blur(4px)">
+              </div>
+              <div class="hero-pill"><i class="fa-solid fa-shield-check" style="color:rgba(255,255,255,.8)"></i> Data on
+                device</div>
             </div>
-            <div id="dash-budgets"></div>
           </div>
+
+          <!-- Stats grid — engine renders stat cards here -->
+          <div class="g4" id="stats-grid" style="margin-bottom:14px"></div>
+
+          <!-- Charts -->
+          <div class="g2" style="margin-bottom:12px">
+            <div class="cd">
+              <div class="cd-hd">
+                <div class="cd-title"><i class="fa-solid fa-chart-pie"></i> Where Money Goes</div>
+              </div>
+              <div class="chart-wrap"><canvas id="c-donut"></canvas></div>
+              <div id="donut-legend" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px"></div>
+            </div>
+            <div class="cd">
+              <div class="cd-hd">
+                <div class="cd-title"><i class="fa-solid fa-chart-area"></i> Last 6 Months</div>
+              </div>
+              <div class="chart-wrap"><canvas id="c-flow"></canvas></div>
+            </div>
+          </div>
+
+          <!-- Recent transactions + budget/goals -->
+          <div class="g2">
+            <div class="cd">
+              <div class="cd-hd">
+                <div class="cd-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</div>
+                <button class="btn sm" onclick="nav('transactions')">See All</button>
+              </div>
+              <div id="recent-tx-list"></div>
+            </div>
+            <div>
+              <div class="cd" style="margin-bottom:12px">
+                <div class="cd-hd">
+                  <div class="cd-title"><i class="fa-solid fa-scale-balanced"></i> Budget Status</div>
+                  <button class="btn sm" onclick="nav('budget')">Manage</button>
+                </div>
+                <div id="dash-budgets"></div>
+              </div>
+              <div class="cd">
+                <div class="cd-hd">
+                  <div class="cd-title"><i class="fa-solid fa-bullseye"></i> Savings Goals</div>
+                  <button class="btn sm" onclick="nav('goals')">All Goals</button>
+                </div>
+                <div id="dash-goals"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ TRANSACTIONS ══ -->
+        <div class="view" id="view-transactions">
+          <!-- Mobile month nav -->
+          <div class="mobile-month-nav">
+            <button onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="mobile-mlbl-tx" style="font-size:14px;font-weight:600"></span>
+            <button onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <div class="sec-hd">
+            <h3>Transactions</h3>
+            <div class="fr gap8">
+              <button class="btn sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> CSV</button>
+              <button class="btn-p sm" onclick="openTxM()"><i class="fa-solid fa-plus"></i> Add</button>
+            </div>
+          </div>
+          <!-- Filters — engine reads f-type, f-cat, f-acc, f-search, f-sort -->
+          <div class="filter-bar">
+            <select id="f-type" onchange="renderTx()">
+              <option value="">All Types</option>
+              <option value="income">Money In</option>
+              <option value="expense">Money Out</option>
+              <option value="transfer">Transfers</option>
+            </select>
+            <select id="f-cat" onchange="renderTx()">
+              <option value="">All Categories</option>
+            </select>
+            <select id="f-acc" onchange="renderTx()">
+              <option value="">All Accounts</option>
+            </select>
+            <input type="text" id="f-search" placeholder="Search transactions…" oninput="renderTx()">
+            <select id="f-sort" onchange="renderTx()">
+              <option value="date-desc">Newest First</option>
+              <option value="date-asc">Oldest First</option>
+              <option value="amount-desc">Largest First</option>
+              <option value="amount-asc">Smallest First</option>
+            </select>
+          </div>
+          <div class="cd" style="padding:0;overflow:hidden;margin-bottom:10px">
+            <div class="tbl-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Account</th>
+                    <th>Tags</th>
+                    <th style="text-align:right">Amount</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tx-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- Summary bar — engine sets innerHTML -->
+          <div class="cd" style="padding:11px 14px">
+            <div class="fr" style="gap:16px;flex-wrap:wrap;font-size:13px" id="tx-summary"></div>
+          </div>
+        </div>
+
+        <!-- ══ ACCOUNTS ══ -->
+        <div class="view" id="view-accounts">
+          <div class="sec-hd">
+            <h3>Accounts</h3>
+            <button class="btn-p sm" onclick="openAccM()"><i class="fa-solid fa-plus"></i> Add Account</button>
+          </div>
+          <!-- acc-grid: engine renders account cards here -->
+          <div class="g-auto" id="acc-grid"></div>
+          <!-- acc-detail: engine shows/hides this for account drill-down -->
+          <div id="acc-detail" style="display:none">
+            <div class="sec-hd" style="margin-top:16px">
+              <h3 id="acc-detail-title"></h3>
+              <button class="btn sm" onclick="nav('accounts',null,null,true)"><i class="fa-solid fa-arrow-left"></i>
+                Back</button>
+            </div>
+            <div class="cd" style="padding:0;overflow:hidden">
+              <div class="tbl-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Description</th>
+                      <th>Category</th>
+                      <th style="text-align:right">Amount</th>
+                      <th style="text-align:right">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody id="acc-detail-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ BUDGET ══ -->
+        <div class="view" id="view-budget">
+          <div class="sec-hd">
+            <h3>Budgets</h3>
+            <button class="btn-p sm" onclick="openBudM()"><i class="fa-solid fa-plus"></i> Set Budget</button>
+          </div>
+          <!-- bud-grid: engine renders budget cards here -->
+          <div class="g2" id="bud-grid"></div>
+        </div>
+
+        <!-- ══ GOALS ══ -->
+        <div class="view" id="view-goals">
+          <div class="sec-hd">
+            <h3>Savings Goals</h3>
+            <button class="btn-p sm" onclick="openGoalM()"><i class="fa-solid fa-plus"></i> New Goal</button>
+          </div>
+          <div class="g2" id="goal-grid"></div>
+        </div>
+
+        <!-- ══ RECURRING ══ -->
+        <div class="view" id="view-recurring">
+          <div class="sec-hd">
+            <h3>Recurring Payments</h3>
+            <button class="btn-p sm" onclick="openRcM()"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+          <div class="g2">
+            <div>
+              <div
+                style="font-size:11px;font-weight:700;color:var(--fg3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px">
+                Scheduled</div>
+              <div id="rc-list"></div>
+            </div>
+            <div>
+              <div
+                style="font-size:11px;font-weight:700;color:var(--fg3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px">
+                Monthly Overview</div>
+              <div class="cd" id="rc-summary"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ CATEGORIES ══ -->
+        <div class="view" id="view-categories">
+          <div class="sec-hd">
+            <h3>Categories</h3>
+            <button class="btn-p sm" onclick="openCatM()"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+          <div class="g2" id="cat-grid"></div>
+        </div>
+
+        <!-- ══ REPORTS ══ -->
+        <div class="view" id="view-reports">
+          <div class="sec-hd" style="margin-bottom:0">
+            <h3>Reports</h3>
+            <button class="btn sm" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+          </div>
+          <div class="tab-bar" style="margin-top:12px">
+            <button class="tab-btn on" onclick="switchReportTab('overview')">Overview</button>
+            <button class="tab-btn" onclick="switchReportTab('spending')">Spending</button>
+            <button class="tab-btn" onclick="switchReportTab('income')">Income</button>
+            <button class="tab-btn" onclick="switchReportTab('cashflow')">Cash Flow</button>
+            <button class="tab-btn" onclick="switchReportTab('net')">Net Worth</button>
+          </div>
+          <div class="tab-pane on" id="rpt-overview">
+            <div class="g2" style="margin-bottom:12px">
+              <div class="cd">
+                <div class="cd-hd">
+                  <div class="cd-title"><i class="fa-solid fa-chart-bar"></i> Income vs Spending</div>
+                </div>
+                <div class="chart-wrap-tall"><canvas id="rpt-c1"></canvas></div>
+              </div>
+              <div class="cd">
+                <div class="cd-hd">
+                  <div class="cd-title"><i class="fa-solid fa-chart-pie"></i> Spending Breakdown</div>
+                </div>
+                <div class="chart-wrap-tall"><canvas id="rpt-c2"></canvas></div>
+              </div>
+            </div>
+            <div class="cd" style="padding:0;overflow:hidden">
+              <div
+                style="padding:12px 14px 0;font-size:11px;font-weight:700;color:var(--fg3);letter-spacing:.07em;text-transform:uppercase">
+                By Category</div>
+              <div class="tbl-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Type</th>
+                      <th>Transactions</th>
+                      <th style="text-align:right">Total</th>
+                      <th style="text-align:right">% of Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rpt-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="rpt-spending">
+            <div class="g2">
+              <div class="cd">
+                <div class="cd-hd">
+                  <div class="cd-title">Top Categories</div>
+                </div>
+                <div class="chart-wrap-tall"><canvas id="rpt-c3"></canvas></div>
+              </div>
+              <div class="cd">
+                <div class="cd-hd">
+                  <div class="cd-title">Daily Pattern</div>
+                </div>
+                <div class="chart-wrap-tall"><canvas id="rpt-c4"></canvas></div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="rpt-income">
+            <div class="g2">
+              <div class="cd">
+                <div class="cd-hd">
+                  <div class="cd-title">Income Sources</div>
+                </div>
+                <div class="chart-wrap-tall"><canvas id="rpt-c5"></canvas></div>
+              </div>
+              <div class="cd">
+                <div class="cd-hd">
+                  <div class="cd-title">Income Trend</div>
+                </div>
+                <div class="chart-wrap-tall"><canvas id="rpt-c6"></canvas></div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="rpt-cashflow">
+            <div class="cd">
+              <div class="cd-hd">
+                <div class="cd-title">12-Month Cash Flow</div>
+              </div>
+              <div class="chart-wrap-tall" style="height:300px"><canvas id="rpt-c7"></canvas></div>
+            </div>
+          </div>
+          <div class="tab-pane" id="rpt-net">
+            <div class="cd">
+              <div class="cd-hd">
+                <div class="cd-title">Net Worth History</div>
+              </div>
+              <div class="chart-wrap-tall" style="height:300px"><canvas id="rpt-c8"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ INSIGHTS ══ -->
+        <div class="view" id="view-insights">
+          <div class="sec-hd" style="margin-bottom:16px">
+            <h3>Insights</h3>
+            <span style="font-size:12px;color:var(--fg3)">From your data</span>
+          </div>
+          <!-- Engine renders insight cards and recommendations here -->
+          <div id="insights-grid" style="margin-bottom:12px"></div>
           <div class="cd">
             <div class="cd-hd">
-              <div class="cd-title"><i class="fa-solid fa-bullseye"></i> Savings Goals</div>
-              <button class="btn sm" onclick="nav('goals')">All Goals</button>
+              <div class="cd-title"><i class="fa-solid fa-lightbulb"></i> Tips for You</div>
             </div>
-            <div id="dash-goals"></div>
+            <div id="insights-recs"></div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- ══ TRANSACTIONS ══ -->
-    <div class="view" id="view-transactions">
-      <!-- Mobile month nav -->
-      <div class="mobile-month-nav">
-        <button onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-        <span id="mobile-mlbl-tx" style="font-size:14px;font-weight:600"></span>
-        <button onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
-      </div>
-      <div class="sec-hd">
-        <h3>Transactions</h3>
-        <div class="fr gap8">
-          <button class="btn sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> CSV</button>
-          <button class="btn-p sm" onclick="openTxM()"><i class="fa-solid fa-plus"></i> Add</button>
-        </div>
-      </div>
-      <!-- Filters — engine reads f-type, f-cat, f-acc, f-search, f-sort -->
-      <div class="filter-bar">
-        <select id="f-type" onchange="renderTx()">
-          <option value="">All Types</option>
-          <option value="income">Money In</option>
-          <option value="expense">Money Out</option>
-          <option value="transfer">Transfers</option>
-        </select>
-        <select id="f-cat" onchange="renderTx()"><option value="">All Categories</option></select>
-        <select id="f-acc" onchange="renderTx()"><option value="">All Accounts</option></select>
-        <input type="text" id="f-search" placeholder="Search transactions…" oninput="renderTx()">
-        <select id="f-sort" onchange="renderTx()">
-          <option value="date-desc">Newest First</option>
-          <option value="date-asc">Oldest First</option>
-          <option value="amount-desc">Largest First</option>
-          <option value="amount-asc">Smallest First</option>
-        </select>
-      </div>
-      <div class="cd" style="padding:0;overflow:hidden;margin-bottom:10px">
-        <div class="tbl-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Account</th>
-                <th>Tags</th>
-                <th style="text-align:right">Amount</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="tx-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-      <!-- Summary bar — engine sets innerHTML -->
-      <div class="cd" style="padding:11px 14px">
-        <div class="fr" style="gap:16px;flex-wrap:wrap;font-size:13px" id="tx-summary"></div>
-      </div>
-    </div>
-
-    <!-- ══ ACCOUNTS ══ -->
-    <div class="view" id="view-accounts">
-      <div class="sec-hd">
-        <h3>Accounts</h3>
-        <button class="btn-p sm" onclick="openAccM()"><i class="fa-solid fa-plus"></i> Add Account</button>
-      </div>
-      <!-- acc-grid: engine renders account cards here -->
-      <div class="g-auto" id="acc-grid"></div>
-      <!-- acc-detail: engine shows/hides this for account drill-down -->
-      <div id="acc-detail" style="display:none">
-        <div class="sec-hd" style="margin-top:16px">
-          <h3 id="acc-detail-title"></h3>
-          <button class="btn sm" onclick="nav('accounts',null,null,true)"><i class="fa-solid fa-arrow-left"></i> Back</button>
-        </div>
-        <div class="cd" style="padding:0;overflow:hidden">
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr><th>Date</th><th>Description</th><th>Category</th><th style="text-align:right">Amount</th><th style="text-align:right">Balance</th></tr>
-              </thead>
-              <tbody id="acc-detail-tbody"></tbody>
-            </table>
+        <!-- ══ SETTINGS ══ -->
+        <div class="view" id="view-settings">
+          <div class="sec-hd" style="margin-bottom:18px">
+            <h3>Settings</h3>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ BUDGET ══ -->
-    <div class="view" id="view-budget">
-      <div class="sec-hd">
-        <h3>Budgets</h3>
-        <button class="btn-p sm" onclick="openBudM()"><i class="fa-solid fa-plus"></i> Set Budget</button>
-      </div>
-      <!-- bud-grid: engine renders budget cards here -->
-      <div class="g2" id="bud-grid"></div>
-    </div>
-
-    <!-- ══ GOALS ══ -->
-    <div class="view" id="view-goals">
-      <div class="sec-hd">
-        <h3>Savings Goals</h3>
-        <button class="btn-p sm" onclick="openGoalM()"><i class="fa-solid fa-plus"></i> New Goal</button>
-      </div>
-      <div class="g2" id="goal-grid"></div>
-    </div>
-
-    <!-- ══ RECURRING ══ -->
-    <div class="view" id="view-recurring">
-      <div class="sec-hd">
-        <h3>Recurring Payments</h3>
-        <button class="btn-p sm" onclick="openRcM()"><i class="fa-solid fa-plus"></i> Add</button>
-      </div>
-      <div class="g2">
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--fg3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px">Scheduled</div>
-          <div id="rc-list"></div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--fg3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px">Monthly Overview</div>
-          <div class="cd" id="rc-summary"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ CATEGORIES ══ -->
-    <div class="view" id="view-categories">
-      <div class="sec-hd">
-        <h3>Categories</h3>
-        <button class="btn-p sm" onclick="openCatM()"><i class="fa-solid fa-plus"></i> Add</button>
-      </div>
-      <div class="g2" id="cat-grid"></div>
-    </div>
-
-    <!-- ══ REPORTS ══ -->
-    <div class="view" id="view-reports">
-      <div class="sec-hd" style="margin-bottom:0">
-        <h3>Reports</h3>
-        <button class="btn sm" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
-      </div>
-      <div class="tab-bar" style="margin-top:12px">
-        <button class="tab-btn on" onclick="switchReportTab('overview')">Overview</button>
-        <button class="tab-btn" onclick="switchReportTab('spending')">Spending</button>
-        <button class="tab-btn" onclick="switchReportTab('income')">Income</button>
-        <button class="tab-btn" onclick="switchReportTab('cashflow')">Cash Flow</button>
-        <button class="tab-btn" onclick="switchReportTab('net')">Net Worth</button>
-      </div>
-      <div class="tab-pane on" id="rpt-overview">
-        <div class="g2" style="margin-bottom:12px">
-          <div class="cd"><div class="cd-hd"><div class="cd-title"><i class="fa-solid fa-chart-bar"></i> Income vs Spending</div></div><div class="chart-wrap-tall"><canvas id="rpt-c1"></canvas></div></div>
-          <div class="cd"><div class="cd-hd"><div class="cd-title"><i class="fa-solid fa-chart-pie"></i> Spending Breakdown</div></div><div class="chart-wrap-tall"><canvas id="rpt-c2"></canvas></div></div>
-        </div>
-        <div class="cd" style="padding:0;overflow:hidden">
-          <div style="padding:12px 14px 0;font-size:11px;font-weight:700;color:var(--fg3);letter-spacing:.07em;text-transform:uppercase">By Category</div>
-          <div class="tbl-wrap"><table><thead><tr><th>Category</th><th>Type</th><th>Transactions</th><th style="text-align:right">Total</th><th style="text-align:right">% of Total</th></tr></thead><tbody id="rpt-tbody"></tbody></table></div>
-        </div>
-      </div>
-      <div class="tab-pane" id="rpt-spending">
-        <div class="g2">
-          <div class="cd"><div class="cd-hd"><div class="cd-title">Top Categories</div></div><div class="chart-wrap-tall"><canvas id="rpt-c3"></canvas></div></div>
-          <div class="cd"><div class="cd-hd"><div class="cd-title">Daily Pattern</div></div><div class="chart-wrap-tall"><canvas id="rpt-c4"></canvas></div></div>
-        </div>
-      </div>
-      <div class="tab-pane" id="rpt-income">
-        <div class="g2">
-          <div class="cd"><div class="cd-hd"><div class="cd-title">Income Sources</div></div><div class="chart-wrap-tall"><canvas id="rpt-c5"></canvas></div></div>
-          <div class="cd"><div class="cd-hd"><div class="cd-title">Income Trend</div></div><div class="chart-wrap-tall"><canvas id="rpt-c6"></canvas></div></div>
-        </div>
-      </div>
-      <div class="tab-pane" id="rpt-cashflow">
-        <div class="cd"><div class="cd-hd"><div class="cd-title">12-Month Cash Flow</div></div><div class="chart-wrap-tall" style="height:300px"><canvas id="rpt-c7"></canvas></div></div>
-      </div>
-      <div class="tab-pane" id="rpt-net">
-        <div class="cd"><div class="cd-hd"><div class="cd-title">Net Worth History</div></div><div class="chart-wrap-tall" style="height:300px"><canvas id="rpt-c8"></canvas></div></div>
-      </div>
-    </div>
-
-    <!-- ══ INSIGHTS ══ -->
-    <div class="view" id="view-insights">
-      <div class="sec-hd" style="margin-bottom:16px">
-        <h3>Insights</h3>
-        <span style="font-size:12px;color:var(--fg3)">From your data</span>
-      </div>
-      <!-- Engine renders insight cards and recommendations here -->
-      <div id="insights-grid" style="margin-bottom:12px"></div>
-      <div class="cd">
-        <div class="cd-hd"><div class="cd-title"><i class="fa-solid fa-lightbulb"></i> Tips for You</div></div>
-        <div id="insights-recs"></div>
-      </div>
-    </div>
-
-    <!-- ══ SETTINGS ══ -->
-    <div class="view" id="view-settings">
-      <div class="sec-hd" style="margin-bottom:18px"><h3>Settings</h3></div>
-      <div class="g2">
-        <!-- Left column -->
-        <div>
-          <div class="set-sec">
-            <div class="set-sec-hd"><i class="fa-solid fa-palette"></i> Appearance</div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Dark Mode</h4><p>Switch between dark and light</p></div>
-              <label class="toggle"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span class="toggle-slider"></span></label>
+          <div class="g2">
+            <!-- Left column -->
+            <div>
+              <div class="set-sec">
+                <div class="set-sec-hd"><i class="fa-solid fa-palette"></i> Appearance</div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Dark Mode</h4>
+                    <p>Switch between dark and light</p>
+                  </div>
+                  <label class="toggle"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span
+                      class="toggle-slider"></span></label>
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Currency</h4>
+                    <p>Your currency symbol</p>
+                  </div>
+                  <select id="s-currency" onchange="savePref()" style="width:110px;font-size:14px">
+                    <option value="$">$ Dollar</option>
+                    <option value="€">€ Euro</option>
+                    <option value="£">£ Pound</option>
+                    <option value="₹">₹ Rupee</option>
+                    <option value="¥">¥ Yen</option>
+                    <option value="₩">₩ Won</option>
+                    <option value="Fr">Fr Franc</option>
+                    <option value="A$">A$ AUD</option>
+                    <option value="C$">C$ CAD</option>
+                  </select>
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Date Format</h4>
+                    <p>How dates are displayed</p>
+                  </div>
+                  <select id="s-dateformat" onchange="savePref()" style="width:140px;font-size:14px">
+                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                  </select>
+                </div>
+              </div>
+              <div class="set-sec">
+                <div class="set-sec-hd"><i class="fa-solid fa-user"></i> Profile</div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Your Name</h4>
+                    <p>Shows in greeting</p>
+                  </div>
+                  <input type="text" id="s-name" placeholder="Your name" onchange="savePref()"
+                    style="width:140px;font-size:14px">
+                </div>
+              </div>
+              <div class="set-sec">
+                <div class="set-sec-hd"><i class="fa-solid fa-keyboard"></i> Keyboard Shortcuts</div>
+                <div class="cd" style="font-size:12px;line-height:2">
+                  <div class="fb" style="margin-bottom:3px"><span>New transaction</span><span
+                      class="kbd"><kbd>⌘</kbd><kbd>N</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Search</span><span
+                      class="kbd"><kbd>⌘</kbd><kbd>K</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Toggle sidebar</span><span
+                      class="kbd"><kbd>B</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Toggle theme</span><span
+                      class="kbd"><kbd>T</kbd></span></div>
+                  <div class="fb"><span>Navigate views</span><span class="kbd"><kbd>1</kbd>–<kbd>9</kbd></span></div>
+                </div>
+              </div>
             </div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Currency</h4><p>Your currency symbol</p></div>
-              <select id="s-currency" onchange="savePref()" style="width:110px;font-size:14px">
-                <option value="$">$ Dollar</option>
-                <option value="€">€ Euro</option>
-                <option value="£">£ Pound</option>
-                <option value="₹">₹ Rupee</option>
-                <option value="¥">¥ Yen</option>
-                <option value="₩">₩ Won</option>
-                <option value="Fr">Fr Franc</option>
-                <option value="A$">A$ AUD</option>
-                <option value="C$">C$ CAD</option>
-              </select>
-            </div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Date Format</h4><p>How dates are displayed</p></div>
-              <select id="s-dateformat" onchange="savePref()" style="width:140px;font-size:14px">
-                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-              </select>
-            </div>
-          </div>
-          <div class="set-sec">
-            <div class="set-sec-hd"><i class="fa-solid fa-user"></i> Profile</div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Your Name</h4><p>Shows in greeting</p></div>
-              <input type="text" id="s-name" placeholder="Your name" onchange="savePref()" style="width:140px;font-size:14px">
-            </div>
-          </div>
-          <div class="set-sec">
-            <div class="set-sec-hd"><i class="fa-solid fa-keyboard"></i> Keyboard Shortcuts</div>
-            <div class="cd" style="font-size:12px;line-height:2">
-              <div class="fb" style="margin-bottom:3px"><span>New transaction</span><span class="kbd"><kbd>⌘</kbd><kbd>N</kbd></span></div>
-              <div class="fb" style="margin-bottom:3px"><span>Search</span><span class="kbd"><kbd>⌘</kbd><kbd>K</kbd></span></div>
-              <div class="fb" style="margin-bottom:3px"><span>Toggle sidebar</span><span class="kbd"><kbd>B</kbd></span></div>
-              <div class="fb" style="margin-bottom:3px"><span>Toggle theme</span><span class="kbd"><kbd>T</kbd></span></div>
-              <div class="fb"><span>Navigate views</span><span class="kbd"><kbd>1</kbd>–<kbd>9</kbd></span></div>
+            <!-- Right column -->
+            <div>
+              <div class="set-sec">
+                <div class="set-sec-hd"><i class="fa-solid fa-database"></i> Your Data</div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Export Backup</h4>
+                    <p>Download all data as JSON</p>
+                  </div>
+                  <button class="btn sm" onclick="exportData()"><i class="fa-solid fa-download"></i> Export</button>
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Export as Spreadsheet</h4>
+                    <p>Download transactions as CSV</p>
+                  </div>
+                  <button class="btn sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> CSV</button>
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Restore Backup</h4>
+                    <p>Import from a JSON backup</p>
+                  </div>
+                  <button class="btn sm" onclick="document.getElementById('import-file').click()"><i
+                      class="fa-solid fa-upload"></i> Import</button>
+                  <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Storage Used</h4>
+                    <p id="storage-detail">Calculating…</p>
+                  </div>
+                  <button class="btn sm" onclick="updStorageInfo()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                </div>
+              </div>
+              <div class="set-sec">
+                <div class="set-sec-hd"><i class="fa-solid fa-mobile-screen"></i> App</div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Install as App</h4>
+                    <p>Add to home screen</p>
+                  </div>
+                  <button class="btn sm" id="install-btn" onclick="installPWA()" style="display:none"><i
+                      class="fa-solid fa-download"></i> Install</button>
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Load Sample Data</h4>
+                    <p>Reset with demo transactions</p>
+                  </div>
+                  <button class="btn sm" onclick="resetSeedData()"><i class="fa-solid fa-rotate"></i> Reset</button>
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Delete All Data</h4>
+                    <p style="color:var(--red)">Permanently erase everything</p>
+                  </div>
+                  <button class="btn sm danger" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Erase</button>
+                </div>
+              </div>
+              <div class="set-sec">
+                <div class="set-sec-hd"><i class="fa-solid fa-circle-info"></i> About</div>
+                <div class="cd" style="font-size:13px;color:var(--fg3);line-height:1.9">
+                  <p><strong style="color:var(--fg)">Wallet</strong> — Personal Finance</p>
+                  <p>Version 3.0 · No sign-up required.</p>
+                  <p>All data stays privately on your device.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <!-- Right column -->
-        <div>
-          <div class="set-sec">
-            <div class="set-sec-hd"><i class="fa-solid fa-database"></i> Your Data</div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Export Backup</h4><p>Download all data as JSON</p></div>
-              <button class="btn sm" onclick="exportData()"><i class="fa-solid fa-download"></i> Export</button>
-            </div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Export as Spreadsheet</h4><p>Download transactions as CSV</p></div>
-              <button class="btn sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> CSV</button>
-            </div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Restore Backup</h4><p>Import from a JSON backup</p></div>
-              <button class="btn sm" onclick="document.getElementById('import-file').click()"><i class="fa-solid fa-upload"></i> Import</button>
-              <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
-            </div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Storage Used</h4><p id="storage-detail">Calculating…</p></div>
-              <button class="btn sm" onclick="updStorageInfo()"><i class="fa-solid fa-arrows-rotate"></i></button>
-            </div>
-          </div>
-          <div class="set-sec">
-            <div class="set-sec-hd"><i class="fa-solid fa-mobile-screen"></i> App</div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Install as App</h4><p>Add to home screen</p></div>
-              <button class="btn sm" id="install-btn" onclick="installPWA()" style="display:none"><i class="fa-solid fa-download"></i> Install</button>
-            </div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Load Sample Data</h4><p>Reset with demo transactions</p></div>
-              <button class="btn sm" onclick="resetSeedData()"><i class="fa-solid fa-rotate"></i> Reset</button>
-            </div>
-            <div class="set-row">
-              <div class="set-row-info"><h4>Delete All Data</h4><p style="color:var(--red)">Permanently erase everything</p></div>
-              <button class="btn sm danger" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Erase</button>
-            </div>
-          </div>
-          <div class="set-sec">
-            <div class="set-sec-hd"><i class="fa-solid fa-circle-info"></i> About</div>
-            <div class="cd" style="font-size:13px;color:var(--fg3);line-height:1.9">
-              <p><strong style="color:var(--fg)">Wallet</strong> — Personal Finance</p>
-              <p>Version 3.0 · No sign-up required.</p>
-              <p>All data stays privately on your device.</p>
-            </div>
-          </div>
-        </div>
+
+      </div><!-- /#content -->
+    </div><!-- /#mw -->
+  </div><!-- /#app -->
+
+  <!-- ══ MOBILE BOTTOM NAV ══ -->
+  <div id="bottom-nav">
+    <div class="bn-row">
+      <button class="bn-item on" onclick="nav('dashboard')" data-bnview="dashboard">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="bn-item" onclick="nav('transactions')" data-bnview="transactions">
+        <i class="fa-solid fa-list-ul"></i>
+        <span>Activity</span>
+      </button>
+      <!-- Center add button -->
+      <div class="bn-item bn-add">
+        <button class="bn-add-circle" onclick="openTxM()" aria-label="Add transaction">
+          <i class="fa-solid fa-plus"></i>
+        </button>
       </div>
-    </div>
-
-  </div><!-- /#content -->
-</div><!-- /#mw -->
-</div><!-- /#app -->
-
-<!-- ══ MOBILE BOTTOM NAV ══ -->
-<div id="bottom-nav">
-  <div class="bn-row">
-    <button class="bn-item on" onclick="nav('dashboard')" data-bnview="dashboard">
-      <i class="fa-solid fa-house"></i>
-      <span>Home</span>
-    </button>
-    <button class="bn-item" onclick="nav('transactions')" data-bnview="transactions">
-      <i class="fa-solid fa-list-ul"></i>
-      <span>Activity</span>
-    </button>
-    <!-- Center add button -->
-    <div class="bn-item bn-add">
-      <button class="bn-add-circle" onclick="openTxM()" aria-label="Add transaction">
-        <i class="fa-solid fa-plus"></i>
+      <button class="bn-item" onclick="nav('accounts')" data-bnview="accounts">
+        <i class="fa-solid fa-vault"></i>
+        <span>Accounts</span>
+      </button>
+      <button class="bn-item" onclick="toggleMobileMore()" id="bn-more-btn">
+        <i class="fa-solid fa-ellipsis"></i>
+        <span>More</span>
       </button>
     </div>
-    <button class="bn-item" onclick="nav('accounts')" data-bnview="accounts">
-      <i class="fa-solid fa-vault"></i>
-      <span>Accounts</span>
-    </button>
-    <button class="bn-item" onclick="toggleMobileMore()" id="bn-more-btn">
-      <i class="fa-solid fa-ellipsis"></i>
-      <span>More</span>
-    </button>
   </div>
-</div>
 
-<!-- Mobile more menu -->
-<div id="mobile-more-menu">
-  <div class="mm-item" onclick="nav('budget');closeMobileMore()"><i class="fa-solid fa-scale-balanced"></i> Budgets</div>
-  <div class="mm-item" onclick="nav('goals');closeMobileMore()"><i class="fa-solid fa-bullseye"></i> Goals</div>
-  <div class="mm-item" onclick="nav('reports');closeMobileMore()"><i class="fa-solid fa-chart-line"></i> Reports</div>
-  <div class="mm-item" onclick="nav('insights');closeMobileMore()"><i class="fa-solid fa-lightbulb"></i> Insights</div>
-  <div class="mm-item" onclick="nav('recurring');closeMobileMore()"><i class="fa-solid fa-rotate"></i> Recurring</div>
-  <div class="mm-item" onclick="nav('categories');closeMobileMore()"><i class="fa-solid fa-tags"></i> Categories</div>
-  <div class="mm-item" onclick="nav('settings');closeMobileMore()"><i class="fa-solid fa-gear"></i> Settings</div>
-</div>
-
-<!-- ══ MODALS ══ -->
-
-<!-- Transaction -->
-<div class="mo" id="mo-tx">
-  <div class="mo-box">
-    <div class="mo-hd">
-      <h3 id="mo-tx-title">Add Transaction</h3>
-      <button class="mo-close" onclick="closeTxM()"><i class="fa-solid fa-xmark"></i></button>
+  <!-- Mobile more menu -->
+  <div id="mobile-more-menu">
+    <div class="mm-item" onclick="nav('budget');closeMobileMore()"><i class="fa-solid fa-scale-balanced"></i> Budgets
     </div>
-    <div class="mo-body">
-      <div class="type-toggle">
-        <button class="tt-btn on expense" id="tt-expense" onclick="setTxType('expense')"><i class="fa-solid fa-arrow-down"></i> Spent</button>
-        <button class="tt-btn income" id="tt-income" onclick="setTxType('income')"><i class="fa-solid fa-arrow-up"></i> Received</button>
-        <button class="tt-btn transfer" id="tt-transfer" onclick="setTxType('transfer')"><i class="fa-solid fa-right-left"></i> Transfer</button>
-      </div>
-      <input type="hidden" id="tx-id">
-      <div class="fg-row">
-        <label>Amount</label>
-        <div class="amt-wrap">
-          <span class="amt-prefix" id="tx-currency-sym">$</span>
-          <input type="number" id="tx-amount" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
-        </div>
-        <div class="err-msg" id="e-amount"></div>
-      </div>
-      <div class="fg-row">
-        <label>What was it for?</label>
-        <input type="text" id="tx-desc" placeholder="e.g. Groceries, Salary, Netflix…">
-        <div class="err-msg" id="e-desc"></div>
-      </div>
-      <div class="frow2">
-        <div class="fg-row">
-          <label>Date</label>
-          <input type="date" id="tx-date">
-        </div>
-        <div class="fg-row">
-          <label>Category</label>
-          <select id="tx-cat"><option value="">Select…</option></select>
-          <div class="err-msg" id="e-cat"></div>
-        </div>
-      </div>
-      <div class="fg-row">
-        <label>Account</label>
-        <select id="tx-acc"><option value="">Select…</option></select>
-        <div class="err-msg" id="e-acc"></div>
-      </div>
-      <div class="fg-row" id="tx-to-acc-row" style="display:none">
-        <label>To Account</label>
-        <select id="tx-to-acc"><option value="">Select…</option></select>
-      </div>
-      <div class="frow2">
-        <div class="fg-row">
-          <label>Tags <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
-          <input type="text" id="tx-tags" placeholder="food, bills…">
-        </div>
-        <div class="fg-row">
-          <label>Note <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
-          <input type="text" id="tx-note" placeholder="Extra details…">
-        </div>
-      </div>
+    <div class="mm-item" onclick="nav('goals');closeMobileMore()"><i class="fa-solid fa-bullseye"></i> Goals</div>
+    <div class="mm-item" onclick="nav('reports');closeMobileMore()"><i class="fa-solid fa-chart-line"></i> Reports</div>
+    <div class="mm-item" onclick="nav('insights');closeMobileMore()"><i class="fa-solid fa-lightbulb"></i> Insights
     </div>
-    <div class="mo-ft">
-      <button class="btn" onclick="closeTxM()">Cancel</button>
-      <button class="btn-p sm" onclick="saveTx()"><i class="fa-solid fa-check"></i> <span id="tx-save-lbl">Add Transaction</span></button>
-    </div>
+    <div class="mm-item" onclick="nav('recurring');closeMobileMore()"><i class="fa-solid fa-rotate"></i> Recurring</div>
+    <div class="mm-item" onclick="nav('categories');closeMobileMore()"><i class="fa-solid fa-tags"></i> Categories</div>
+    <div class="mm-item" onclick="nav('settings');closeMobileMore()"><i class="fa-solid fa-gear"></i> Settings</div>
   </div>
-</div>
 
-<!-- Account -->
-<div class="mo" id="mo-acc">
-  <div class="mo-box">
-    <div class="mo-hd">
-      <h3 id="mo-acc-title">Add Account</h3>
-      <button class="mo-close" onclick="closeAccM()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="mo-body">
-      <input type="hidden" id="acc-id">
-      <div class="fg-row">
-        <label>Account Name</label>
-        <input type="text" id="acc-name" placeholder="e.g. Main Checking, Savings…">
-        <div class="err-msg" id="e-acc-name"></div>
-      </div>
-      <div class="frow2">
-        <div class="fg-row">
-          <label>Type</label>
-          <select id="acc-type">
-            <option value="checking">Checking</option>
-            <option value="savings">Savings</option>
-            <option value="credit">Credit Card</option>
-            <option value="investment">Investment</option>
-            <option value="cash">Cash</option>
-            <option value="loan">Loan</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="fg-row">
-          <label>Starting Balance</label>
-          <div class="amt-wrap">
-            <span class="amt-prefix" id="acc-currency-sym">$</span>
-            <input type="number" id="acc-balance" placeholder="0.00" step="0.01" inputmode="decimal">
-          </div>
-        </div>
-      </div>
-      <div class="fg-row">
-        <label>Bank / Institution <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
-        <input type="text" id="acc-bank" placeholder="e.g. Bank of America, HDFC, Barclays">
-      </div>
-      <div class="fg-row">
-        <label>Note <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
-        <input type="text" id="acc-note" placeholder="Any extra details">
-      </div>
-      <div class="fg-row">
-        <label>Color</label>
-        <div class="cpk" id="acc-cpk"></div>
-      </div>
-    </div>
-    <div class="mo-ft">
-      <button class="btn" onclick="closeAccM()">Cancel</button>
-      <button class="btn-p sm" onclick="saveAcc()"><i class="fa-solid fa-check"></i> <span id="acc-save-lbl">Add Account</span></button>
-    </div>
-  </div>
-</div>
+  <!-- ══ MODALS ══ -->
 
-<!-- Category -->
-<div class="mo" id="mo-cat">
-  <div class="mo-box">
-    <div class="mo-hd">
-      <h3 id="mo-cat-title">Add Category</h3>
-      <button class="mo-close" onclick="closeCatM()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="mo-body">
-      <input type="hidden" id="cat-id">
-      <div class="frow2">
-        <div class="fg-row">
-          <label>Category Name</label>
-          <input type="text" id="cat-name" placeholder="e.g. Groceries, Salary…">
-          <div class="err-msg" id="e-cat-name"></div>
+  <!-- Transaction -->
+  <div class="mo" id="mo-tx">
+    <div class="mo-box">
+      <div class="mo-hd">
+        <h3 id="mo-tx-title">Add Transaction</h3>
+        <button class="mo-close" onclick="closeTxM()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body">
+        <div class="type-toggle">
+          <button class="tt-btn on expense" id="tt-expense" onclick="setTxType('expense')"><i
+              class="fa-solid fa-arrow-down"></i> Spent</button>
+          <button class="tt-btn income" id="tt-income" onclick="setTxType('income')"><i
+              class="fa-solid fa-arrow-up"></i> Received</button>
+          <button class="tt-btn transfer" id="tt-transfer" onclick="setTxType('transfer')"><i
+              class="fa-solid fa-right-left"></i> Transfer</button>
         </div>
-        <div class="fg-row">
-          <label>Type</label>
-          <select id="cat-type">
-            <option value="expense">Money Out</option>
-            <option value="income">Money In</option>
-          </select>
-        </div>
-      </div>
-      <div class="fg-row"><label>Color</label><div class="cpk" id="cat-cpk"></div></div>
-      <div class="fg-row"><label>Icon</label><div class="icon-grid" id="cat-icon-grid"></div></div>
-      <!-- cat-icon: hidden field engine reads -->
-      <input type="hidden" id="cat-icon" value="fa-tag">
-    </div>
-    <div class="mo-ft">
-      <button class="btn" onclick="closeCatM()">Cancel</button>
-      <button class="btn-p sm" onclick="saveCat()"><i class="fa-solid fa-check"></i> <span id="cat-save-lbl">Add Category</span></button>
-    </div>
-  </div>
-</div>
-
-<!-- Budget -->
-<div class="mo" id="mo-bud">
-  <div class="mo-box">
-    <div class="mo-hd">
-      <h3 id="mo-bud-title">Set Budget</h3>
-      <button class="mo-close" onclick="closeBudM()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="mo-body">
-      <input type="hidden" id="bud-edit-cat">
-      <div class="fg-row">
-        <label>Category</label>
-        <select id="bud-cat"><option value="">Choose a spending category…</option></select>
-        <div class="err-msg" id="e-bud-cat"></div>
-      </div>
-      <div class="fg-row">
-        <label>Monthly Limit — how much can you spend?</label>
-        <div class="amt-wrap">
-          <span class="amt-prefix" id="bud-currency-sym">$</span>
-          <input type="number" id="bud-limit" placeholder="0.00" step="0.01" inputmode="decimal">
-        </div>
-        <div class="err-msg" id="e-bud-limit"></div>
-      </div>
-      <div class="fg-row">
-        <div class="fb">
-          <div>
-            <div style="font-size:14px;font-weight:600">Roll over unused budget</div>
-            <div style="font-size:12px;color:var(--fg3);margin-top:2px">Add leftover to next month's limit</div>
-          </div>
-          <label class="toggle"><input type="checkbox" id="bud-rollover"><span class="toggle-slider"></span></label>
-        </div>
-      </div>
-    </div>
-    <div class="mo-ft">
-      <button class="btn" onclick="closeBudM()">Cancel</button>
-      <button class="btn-p sm" onclick="saveBud()"><i class="fa-solid fa-check"></i> Save Budget</button>
-    </div>
-  </div>
-</div>
-
-<!-- Goal -->
-<div class="mo" id="mo-goal">
-  <div class="mo-box">
-    <div class="mo-hd">
-      <h3 id="mo-goal-title">New Goal</h3>
-      <button class="mo-close" onclick="closeGoalM()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="mo-body">
-      <input type="hidden" id="goal-id">
-      <input type="hidden" id="goal-icon" value="fa-star">
-      <div class="fg-row">
-        <label>What are you saving for?</label>
-        <input type="text" id="goal-name" placeholder="e.g. Vacation, Emergency Fund, New Car…">
-        <div class="err-msg" id="e-goal-name"></div>
-      </div>
-      <div class="frow2">
-        <div class="fg-row">
-          <label>Target Amount</label>
-          <div class="amt-wrap">
-            <span class="amt-prefix" id="goal-currency-sym">$</span>
-            <input type="number" id="goal-target" placeholder="0.00" step="0.01" inputmode="decimal">
-          </div>
-        </div>
-        <div class="fg-row">
-          <label>Already Saved</label>
-          <div class="amt-wrap">
-            <span class="amt-prefix" id="goal-currency-sym2">$</span>
-            <input type="number" id="goal-current" placeholder="0.00" step="0.01" inputmode="decimal">
-          </div>
-        </div>
-      </div>
-      <div class="fg-row">
-        <label>Target Date <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
-        <input type="date" id="goal-date">
-      </div>
-      <div class="fg-row"><label>Color</label><div class="cpk" id="goal-cpk"></div></div>
-    </div>
-    <div class="mo-ft">
-      <button class="btn" onclick="closeGoalM()">Cancel</button>
-      <button class="btn-p sm" onclick="saveGoal()"><i class="fa-solid fa-check"></i> <span id="goal-save-lbl">Create Goal</span></button>
-    </div>
-  </div>
-</div>
-
-<!-- Recurring -->
-<div class="mo" id="mo-rc">
-  <div class="mo-box">
-    <div class="mo-hd">
-      <h3 id="mo-rc-title">Add Recurring</h3>
-      <button class="mo-close" onclick="closeRcM()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="mo-body">
-      <input type="hidden" id="rc-id">
-      <div class="fg-row">
-        <label>Name</label>
-        <input type="text" id="rc-name" placeholder="e.g. Netflix, Rent, Salary…">
-        <div class="err-msg" id="e-rc-name"></div>
-      </div>
-      <div class="frow2">
-        <div class="fg-row">
-          <label>Type</label>
-          <select id="rc-type" onchange="updateRcCats()">
-            <option value="expense">Money Out</option>
-            <option value="income">Money In</option>
-          </select>
-        </div>
+        <input type="hidden" id="tx-id">
         <div class="fg-row">
           <label>Amount</label>
           <div class="amt-wrap">
-            <span class="amt-prefix" id="rc-currency-sym">$</span>
-            <input type="number" id="rc-amount" placeholder="0.00" step="0.01" inputmode="decimal">
+            <span class="amt-prefix" id="tx-currency-sym">$</span>
+            <input type="number" id="tx-amount" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
           </div>
+          <div class="err-msg" id="e-amount"></div>
         </div>
-      </div>
-      <div class="frow2">
         <div class="fg-row">
-          <label>Category</label>
-          <select id="rc-cat"><option value="">Select…</option></select>
+          <label>What was it for?</label>
+          <input type="text" id="tx-desc" placeholder="e.g. Groceries, Salary, Netflix…">
+          <div class="err-msg" id="e-desc"></div>
+        </div>
+        <div class="frow2">
+          <div class="fg-row">
+            <label>Date</label>
+            <input type="date" id="tx-date">
+          </div>
+          <div class="fg-row">
+            <label>Category</label>
+            <select id="tx-cat">
+              <option value="">Select…</option>
+            </select>
+            <div class="err-msg" id="e-cat"></div>
+          </div>
         </div>
         <div class="fg-row">
           <label>Account</label>
-          <select id="rc-acc"><option value="">Select…</option></select>
+          <select id="tx-acc">
+            <option value="">Select…</option>
+          </select>
+          <div class="err-msg" id="e-acc"></div>
         </div>
-      </div>
-      <div class="frow2">
-        <div class="fg-row">
-          <label>How Often?</label>
-          <select id="rc-freq">
-            <option value="daily">Every Day</option>
-            <option value="weekly">Every Week</option>
-            <option value="biweekly">Every 2 Weeks</option>
-            <option value="monthly" selected>Every Month</option>
-            <option value="quarterly">Every 3 Months</option>
-            <option value="yearly">Every Year</option>
+        <div class="fg-row" id="tx-to-acc-row" style="display:none">
+          <label>To Account</label>
+          <select id="tx-to-acc">
+            <option value="">Select…</option>
           </select>
         </div>
-        <div class="fg-row">
-          <label>Next Date</label>
-          <input type="date" id="rc-next">
+        <div class="frow2">
+          <div class="fg-row">
+            <label>Tags <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
+            <input type="text" id="tx-tags" placeholder="food, bills…">
+          </div>
+          <div class="fg-row">
+            <label>Note <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
+            <input type="text" id="tx-note" placeholder="Extra details…">
+          </div>
         </div>
       </div>
-    </div>
-    <div class="mo-ft">
-      <button class="btn" onclick="closeRcM()">Cancel</button>
-      <button class="btn-p sm" onclick="saveRc()"><i class="fa-solid fa-check"></i> <span id="rc-save-lbl">Add Recurring</span></button>
+      <div class="mo-ft">
+        <button class="btn" onclick="closeTxM()">Cancel</button>
+        <button class="btn-p sm" onclick="saveTx()"><i class="fa-solid fa-check"></i> <span id="tx-save-lbl">Add
+            Transaction</span></button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Notifications -->
-<div class="mo" id="mo-notif">
-  <div class="mo-box" style="max-width:400px">
-    <div class="mo-hd">
-      <h3>Alerts</h3>
-      <button class="mo-close" onclick="closeNotifPanel()"><i class="fa-solid fa-xmark"></i></button>
+  <!-- Account -->
+  <div class="mo" id="mo-acc">
+    <div class="mo-box">
+      <div class="mo-hd">
+        <h3 id="mo-acc-title">Add Account</h3>
+        <button class="mo-close" onclick="closeAccM()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body">
+        <input type="hidden" id="acc-id">
+        <div class="fg-row">
+          <label>Account Name</label>
+          <input type="text" id="acc-name" placeholder="e.g. Main Checking, Savings…">
+          <div class="err-msg" id="e-acc-name"></div>
+        </div>
+        <div class="frow2">
+          <div class="fg-row">
+            <label>Type</label>
+            <select id="acc-type">
+              <option value="checking">Checking</option>
+              <option value="savings">Savings</option>
+              <option value="credit">Credit Card</option>
+              <option value="investment">Investment</option>
+              <option value="cash">Cash</option>
+              <option value="loan">Loan</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="fg-row">
+            <label>Starting Balance</label>
+            <div class="amt-wrap">
+              <span class="amt-prefix" id="acc-currency-sym">$</span>
+              <input type="number" id="acc-balance" placeholder="0.00" step="0.01" inputmode="decimal">
+            </div>
+          </div>
+        </div>
+        <div class="fg-row">
+          <label>Bank / Institution <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
+          <input type="text" id="acc-bank" placeholder="e.g. Bank of America, HDFC, Barclays">
+        </div>
+        <div class="fg-row">
+          <label>Note <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
+          <input type="text" id="acc-note" placeholder="Any extra details">
+        </div>
+        <div class="fg-row">
+          <label>Color</label>
+          <div class="cpk" id="acc-cpk"></div>
+        </div>
+      </div>
+      <div class="mo-ft">
+        <button class="btn" onclick="closeAccM()">Cancel</button>
+        <button class="btn-p sm" onclick="saveAcc()"><i class="fa-solid fa-check"></i> <span id="acc-save-lbl">Add
+            Account</span></button>
+      </div>
     </div>
-    <div class="mo-body" id="notif-list"></div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════════════
+  <!-- Category -->
+  <div class="mo" id="mo-cat">
+    <div class="mo-box">
+      <div class="mo-hd">
+        <h3 id="mo-cat-title">Add Category</h3>
+        <button class="mo-close" onclick="closeCatM()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body">
+        <input type="hidden" id="cat-id">
+        <div class="frow2">
+          <div class="fg-row">
+            <label>Category Name</label>
+            <input type="text" id="cat-name" placeholder="e.g. Groceries, Salary…">
+            <div class="err-msg" id="e-cat-name"></div>
+          </div>
+          <div class="fg-row">
+            <label>Type</label>
+            <select id="cat-type">
+              <option value="expense">Money Out</option>
+              <option value="income">Money In</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg-row"><label>Color</label>
+          <div class="cpk" id="cat-cpk"></div>
+        </div>
+        <div class="fg-row"><label>Icon</label>
+          <div class="icon-grid" id="cat-icon-grid"></div>
+        </div>
+        <!-- cat-icon: hidden field engine reads -->
+        <input type="hidden" id="cat-icon" value="fa-tag">
+      </div>
+      <div class="mo-ft">
+        <button class="btn" onclick="closeCatM()">Cancel</button>
+        <button class="btn-p sm" onclick="saveCat()"><i class="fa-solid fa-check"></i> <span id="cat-save-lbl">Add
+            Category</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Budget -->
+  <div class="mo" id="mo-bud">
+    <div class="mo-box">
+      <div class="mo-hd">
+        <h3 id="mo-bud-title">Set Budget</h3>
+        <button class="mo-close" onclick="closeBudM()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body">
+        <input type="hidden" id="bud-edit-cat">
+        <div class="fg-row">
+          <label>Category</label>
+          <select id="bud-cat">
+            <option value="">Choose a spending category…</option>
+          </select>
+          <div class="err-msg" id="e-bud-cat"></div>
+        </div>
+        <div class="fg-row">
+          <label>Monthly Limit — how much can you spend?</label>
+          <div class="amt-wrap">
+            <span class="amt-prefix" id="bud-currency-sym">$</span>
+            <input type="number" id="bud-limit" placeholder="0.00" step="0.01" inputmode="decimal">
+          </div>
+          <div class="err-msg" id="e-bud-limit"></div>
+        </div>
+        <div class="fg-row">
+          <div class="fb">
+            <div>
+              <div style="font-size:14px;font-weight:600">Roll over unused budget</div>
+              <div style="font-size:12px;color:var(--fg3);margin-top:2px">Add leftover to next month's limit</div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="bud-rollover"><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+      <div class="mo-ft">
+        <button class="btn" onclick="closeBudM()">Cancel</button>
+        <button class="btn-p sm" onclick="saveBud()"><i class="fa-solid fa-check"></i> Save Budget</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Goal -->
+  <div class="mo" id="mo-goal">
+    <div class="mo-box">
+      <div class="mo-hd">
+        <h3 id="mo-goal-title">New Goal</h3>
+        <button class="mo-close" onclick="closeGoalM()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body">
+        <input type="hidden" id="goal-id">
+        <input type="hidden" id="goal-icon" value="fa-star">
+        <div class="fg-row">
+          <label>What are you saving for?</label>
+          <input type="text" id="goal-name" placeholder="e.g. Vacation, Emergency Fund, New Car…">
+          <div class="err-msg" id="e-goal-name"></div>
+        </div>
+        <div class="frow2">
+          <div class="fg-row">
+            <label>Target Amount</label>
+            <div class="amt-wrap">
+              <span class="amt-prefix" id="goal-currency-sym">$</span>
+              <input type="number" id="goal-target" placeholder="0.00" step="0.01" inputmode="decimal">
+            </div>
+          </div>
+          <div class="fg-row">
+            <label>Already Saved</label>
+            <div class="amt-wrap">
+              <span class="amt-prefix" id="goal-currency-sym2">$</span>
+              <input type="number" id="goal-current" placeholder="0.00" step="0.01" inputmode="decimal">
+            </div>
+          </div>
+        </div>
+        <div class="fg-row">
+          <label>Target Date <span style="color:var(--fg3);font-weight:400">(optional)</span></label>
+          <input type="date" id="goal-date">
+        </div>
+        <div class="fg-row"><label>Color</label>
+          <div class="cpk" id="goal-cpk"></div>
+        </div>
+      </div>
+      <div class="mo-ft">
+        <button class="btn" onclick="closeGoalM()">Cancel</button>
+        <button class="btn-p sm" onclick="saveGoal()"><i class="fa-solid fa-check"></i> <span id="goal-save-lbl">Create
+            Goal</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recurring -->
+  <div class="mo" id="mo-rc">
+    <div class="mo-box">
+      <div class="mo-hd">
+        <h3 id="mo-rc-title">Add Recurring</h3>
+        <button class="mo-close" onclick="closeRcM()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body">
+        <input type="hidden" id="rc-id">
+        <div class="fg-row">
+          <label>Name</label>
+          <input type="text" id="rc-name" placeholder="e.g. Netflix, Rent, Salary…">
+          <div class="err-msg" id="e-rc-name"></div>
+        </div>
+        <div class="frow2">
+          <div class="fg-row">
+            <label>Type</label>
+            <select id="rc-type" onchange="updateRcCats()">
+              <option value="expense">Money Out</option>
+              <option value="income">Money In</option>
+            </select>
+          </div>
+          <div class="fg-row">
+            <label>Amount</label>
+            <div class="amt-wrap">
+              <span class="amt-prefix" id="rc-currency-sym">$</span>
+              <input type="number" id="rc-amount" placeholder="0.00" step="0.01" inputmode="decimal">
+            </div>
+          </div>
+        </div>
+        <div class="frow2">
+          <div class="fg-row">
+            <label>Category</label>
+            <select id="rc-cat">
+              <option value="">Select…</option>
+            </select>
+          </div>
+          <div class="fg-row">
+            <label>Account</label>
+            <select id="rc-acc">
+              <option value="">Select…</option>
+            </select>
+          </div>
+        </div>
+        <div class="frow2">
+          <div class="fg-row">
+            <label>How Often?</label>
+            <select id="rc-freq">
+              <option value="daily">Every Day</option>
+              <option value="weekly">Every Week</option>
+              <option value="biweekly">Every 2 Weeks</option>
+              <option value="monthly" selected>Every Month</option>
+              <option value="quarterly">Every 3 Months</option>
+              <option value="yearly">Every Year</option>
+            </select>
+          </div>
+          <div class="fg-row">
+            <label>Next Date</label>
+            <input type="date" id="rc-next">
+          </div>
+        </div>
+      </div>
+      <div class="mo-ft">
+        <button class="btn" onclick="closeRcM()">Cancel</button>
+        <button class="btn-p sm" onclick="saveRc()"><i class="fa-solid fa-check"></i> <span id="rc-save-lbl">Add
+            Recurring</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div class="mo" id="mo-notif">
+    <div class="mo-box" style="max-width:400px">
+      <div class="mo-hd">
+        <h3>Alerts</h3>
+        <button class="mo-close" onclick="closeNotifPanel()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body" id="notif-list"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
    APP SCRIPTS
 ══════════════════════════════════════════ -->
 
@@ -899,4 +1081,5 @@
   <script src="app.js"></script>
 
 </body>
+
 </html>
