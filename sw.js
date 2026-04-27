@@ -4,23 +4,24 @@
    License: MIT
 
    Cache strategies:
-   - App shell (finflow.html, styles.css, app.js): Cache-first
+   - App shell (index.html, styles.css, app.js): Cache-first
    - CDN assets (Chart.js, FontAwesome, Fonts): Stale-while-revalidate
    - Other GETs: Network-first with cache fallback
 
    Note: Only active when served over HTTP/HTTPS.
-   For file:// usage, finflow.html registers an inline blob SW automatically.
+   For file:// usage, index.html registers an inline blob SW automatically.
 ================================================================= */
 
-var CACHE = "finflow-v3.3";
+var CACHE = "finflow-v3.4";
 
 var APP_SHELL = [
   "./",
-  "./finflow.html",
+  "./index.html",
   "./styles.css",
   "./app.js",
-  "./icon-512.svg",
-  "./icon-192.svg",
+  "./manifest.json",
+  "./icon.svg",
+  "./favicon.svg",
 ];
 
 var CDN_ASSETS = [
@@ -33,7 +34,7 @@ var CDN_ASSETS = [
 
 /* ── Install ── */
 self.addEventListener("install", function (event) {
-  console.log("[FinFlow SW] Installing v3.1");
+  console.log("[FinFlow SW] Installing v3.4");
   event.waitUntil(
     caches
       .open(CACHE)
@@ -56,7 +57,7 @@ self.addEventListener("install", function (event) {
 
 /* ── Activate ── */
 self.addEventListener("activate", function (event) {
-  console.log("[FinFlow SW] Activating v3.1");
+  console.log("[FinFlow SW] Activating v3.4");
   event.waitUntil(
     caches
       .keys()
@@ -84,6 +85,7 @@ self.addEventListener("fetch", function (event) {
   if (req.method !== "GET" || !url.startsWith("http")) return;
 
   var isShell =
+    url.includes("index.html") ||
     url.includes("finflow.html") ||
     url.includes("styles.css") ||
     url.includes("app.js") ||
