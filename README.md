@@ -1,33 +1,32 @@
 # FinFlow — Personal Finance OS
 
-> **Built by Researcher Tizar** · Local-first · Offline-ready · No sign-up · No cloud · No tracking
+> **Built by [Researcher Tizar](https://github.com/researchertizar)** · Local-first · Offline-ready · No sign-up · No cloud · No tracking
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://researchertizar.github.io/FinFlow/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![PWA Ready](https://img.shields.io/badge/PWA-Ready-purple)](https://web.dev/progressive-web-apps/)
+[![PWA Ready](https://img.shields.io/badge/PWA-Installable-purple)](https://web.dev/progressive-web-apps/)
 [![Offline First](https://img.shields.io/badge/Offline-First-green)]()
 [![No Backend](https://img.shields.io/badge/Backend-None-orange)]()
 
-A fully offline, local-first personal finance app. All data lives in your browser's `localStorage` — it never leaves your device.
+A fully offline, local-first personal finance app. All data lives in your browser's `localStorage` — it never leaves your device. No sign-up, no server, no tracking, no ads.
 
 ---
 
-## Project Structure
+## Files
 
 ```
-finflow/
-├── finflow.html     ← Main app (HTML structure)
-├── styles.css       ← All styles (design system, themes, animations)
-├── app.js           ← All logic (data, render, save, PWA)
-├── sw.js            ← Service worker (offline caching, HTTP only)
-├── manifest.json    ← PWA manifest (install to home screen)
-├── index.html       ← Root redirect to finflow.html
-├── 404.html         ← SPA redirect for deep links
-├── .nojekyll        ← GitHub Pages: disables Jekyll processing
+FinFlow/
+├── index.html       ← Main app (open this in your browser)
+├── styles.css       ← Design system, dark/light themes, animations
+├── app.js           ← All logic: data, render, PWA, tutorial, shortcuts
+├── sw.js            ← Service worker (offline caching)
+├── manifest.json    ← PWA manifest (install prompt + shortcuts)
+├── icon.svg         ← App icon (full size)
+├── favicon.svg      ← Browser tab icon (32×32)
+├── 404.html         ← GitHub Pages SPA redirect
+├── .nojekyll        ← Disables Jekyll on GitHub Pages
 └── README.md        ← This file
 ```
-
----
-> **Tip:** Users can install it as a PWA app directly from the browser once it's live on HTTPS.
 ---
 
 ## Features
@@ -35,84 +34,159 @@ finflow/
 | Feature | Details |
 |---------|---------|
 | **Accounts** | Checking, savings, credit, cash, investment, loan |
-| **Transactions** | Income, expense, transfer — with tags and notes |
-| **Budgets** | Monthly limits per category with rollover |
-| **Goals** | Visual savings targets with progress tracking |
-| **Recurring** | Scheduled payments with due-date alerts |
+| **Transactions** | Income, expense, transfer — filters, tags, notes, search |
+| **Budgets** | Monthly limits per category with rollover option |
+| **Goals** | Visual savings targets with progress bar |
+| **Recurring** | Subscriptions and scheduled payments with due alerts |
 | **Reports** | 5 chart views: overview, spending, income, cash flow, net worth |
-| **Insights** | AI-style analysis of spending patterns and savings rate |
-| **Categories** | Customizable with icons and colors |
-| **Themes** | Dark and light mode |
-| **Export** | JSON backup + CSV export |
-| **Import** | Restore from JSON backup |
-| **PWA** | Installable, offline, home screen shortcut |
-
----
-
-## URL Deep Links
-
-```
-finflow.html#dashboard
-finflow.html#transactions
-finflow.html#accounts
-finflow.html#accounts/ACCOUNT_ID
-finflow.html#budget
-finflow.html#goals
-finflow.html#recurring
-finflow.html#reports
-finflow.html#reports?tab=spending
-finflow.html#reports?tab=income
-finflow.html#reports?tab=cashflow
-finflow.html#reports?tab=net
-finflow.html#insights
-finflow.html#settings
-finflow.html#dashboard?m=3&y=2025
-```
+| **Insights** | Savings rate, top expense, daily average, month comparison |
+| **Categories** | 17 defaults, fully customisable with icons and colours |
+| **Themes** | Dark (off-black) and light (warm paper) — toggleable |
+| **Tutorial** | 7-step interactive guide, auto-shows on first visit |
+| **Info buttons** | `?` on every section explains what it does |
+| **Command Palette** | Search and run any action from anywhere |
+| **Keyboard Shortcuts** | Full keyboard navigation — see table below |
+| **Export** | JSON backup + CSV spreadsheet download |
+| **Import** | Restore from any JSON backup |
+| **PWA** | Installable on Android, iOS, and desktop — works offline |
 
 ---
 
 ## Keyboard Shortcuts
 
+### Navigation
+
+| Key | View |
+|-----|------|
+| `1` | Home / Dashboard |
+| `2` | Transactions |
+| `3` | Accounts |
+| `4` | Budgets |
+| `5` | Goals |
+| `6` | Reports |
+| `7` | Insights |
+| `8` | Recurring |
+| `9` | Categories |
+| `0` | Settings |
+
+### Actions
+
 | Key | Action |
 |-----|--------|
-| `1` – `9` | Switch views |
-| `⌘N` / `Ctrl+N` | New transaction |
-| `⌘K` / `Ctrl+K` | Focus search |
-| `←` / `→` | Previous / next month |
+| `N` | New transaction |
+| `A` | New account |
+| `⌘N` / `Ctrl+N` | New transaction (from anywhere) |
+| `⌘K` / `Ctrl+K` | Open command palette |
+| `/` | Open command palette |
+| `⌘E` / `Ctrl+E` | Export JSON backup |
+| `⌘,` / `Ctrl+,` | Open settings |
+| `⌘B` / `Ctrl+B` | Toggle sidebar |
+
+### UI & Navigation
+
+| Key | Action |
+|-----|--------|
+| `←` or `J` | Previous month |
+| `→` or `L` | Next month |
 | `B` | Toggle sidebar |
-| `T` | Toggle theme |
+| `T` | Toggle dark / light theme |
+| `?` | Keyboard shortcuts panel |
 | `Esc` | Close modal / go back |
+| `Backspace` | Go back |
+
+### Reports View Only
+
+| Key | Tab |
+|-----|-----|
+| `O` | Overview |
+| `S` | Spending |
+| `I` | Income |
+| `C` | Cash Flow |
+| `W` | Net Worth |
 
 ---
 
-## Tech Stack
+## URL Deep Links
 
-- **Vanilla HTML + CSS + JavaScript** — zero build tools, zero dependencies
-- **Chart.js 4** — data visualisation
-- **Font Awesome 6** — icons
-- **Inter** — typography
-- **localStorage** — data persistence (private, on-device)
-- **Service Worker** — offline caching (HTTP/HTTPS only)
+Every view is bookmarkable:
+
+```
+/                        → Dashboard (home)
+/#dashboard              → Dashboard
+/#transactions           → Transactions
+/#accounts               → Accounts
+/#budget                 → Budgets
+/#goals                  → Goals
+/#recurring              → Recurring
+/#categories             → Categories
+/#reports                → Reports (overview tab)
+/#reports?tab=spending   → Reports — Spending
+/#reports?tab=income     → Reports — Income
+/#reports?tab=cashflow   → Reports — Cash Flow
+/#reports?tab=net        → Reports — Net Worth
+/#insights               → Insights
+/#settings               → Settings
+/#dashboard?m=3&y=2025   → Dashboard, March 2025
+```
+
+---
+
+## First Run
+
+When opened for the first time:
+1. 17 default categories are seeded (Groceries, Salary, Transport, etc.)
+2. The 7-step tutorial opens automatically
+3. No demo data — start with a clean slate
+
+To explore with sample numbers: **Settings → Load Demo Data**
+
+---
+
+## PWA Install
+
+**Android (Chrome):** Tap the menu → *Add to Home Screen*, or tap the install banner at the top.
+
+**iOS (Safari):** Tap the Share button → *Add to Home Screen*.
+
+**Desktop (Chrome / Edge):** Click the install icon in the address bar, or **Settings → Install as App**.
+
+After installing, FinFlow works fully offline. All data stays on the device.
 
 ---
 
 ## Privacy
 
-- No user accounts, no sign-up
-- No servers, no API calls, no databases
+- No user accounts, no sign-up, no email
+- No servers, no databases, no API calls
 - No analytics, no telemetry, no cookies
-- All data in browser localStorage only
-- External CDN requests: Chart.js, Font Awesome, Google Fonts (fonts only)
+- All data in `localStorage` — never leaves the device
+- External CDN only: Chart.js, Font Awesome, Inter font — no user data sent
+
+---
+
+## Tech Stack
+
+| Layer | Tech |
+|-------|------|
+| Structure | Vanilla HTML5 |
+| Styles | Vanilla CSS3 (custom design system, no framework) |
+| Logic | Vanilla JavaScript ES5+ (no build tools, zero dependencies) |
+| Charts | [Chart.js 4](https://www.chartjs.org/) via CDN |
+| Icons | [Font Awesome 6](https://fontawesome.com/) via CDN |
+| Typography | [Inter](https://fonts.google.com/specimen/Inter) via Google Fonts |
+| Storage | `localStorage` (private, on-device) |
+| Offline | Service Worker — cache-first + stale-while-revalidate |
 
 ---
 
 ## License
 
-MIT License — free to use, modify, and distribute.
+MIT — free to use, modify, and distribute.
 
 ---
 
 ## Credits
 
-**FinFlow** was designed and built by **Researcher Tizar**.  
+**FinFlow** was designed and built by **Researcher Tizar**.
+
 *Designed for simplicity. Built for everyone.*
