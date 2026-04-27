@@ -4946,12 +4946,7 @@ body.light #bottom-nav {
 body.light #content {
   background: #f7f5f2;
 }
-body.light .cd,
-.acc-card,
-.goal-card,
-.bud-card,
-.insight-card,
-.rc-item {
+body.light{
   background: #fefcfa;
 }
 body.light input,
