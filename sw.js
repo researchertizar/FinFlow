@@ -12,7 +12,7 @@
    For file:// usage, index.html registers an inline blob SW automatically.
 ================================================================= */
 
-var CACHE = "finflow-v3.4";
+var CACHE = "finflow-v3.5";
 
 var APP_SHELL = [
   "./",
@@ -34,7 +34,7 @@ var CDN_ASSETS = [
 
 /* ── Install ── */
 self.addEventListener("install", function (event) {
-  console.log("[FinFlow SW] Installing v3.4");
+  console.log("[FinFlow SW] Installing v3.5");
   event.waitUntil(
     caches
       .open(CACHE)
@@ -57,7 +57,7 @@ self.addEventListener("install", function (event) {
 
 /* ── Activate ── */
 self.addEventListener("activate", function (event) {
-  console.log("[FinFlow SW] Activating v3.4");
+  console.log("[FinFlow SW] Activating v3.5");
   event.waitUntil(
     caches
       .keys()
@@ -85,8 +85,8 @@ self.addEventListener("fetch", function (event) {
   if (req.method !== "GET" || !url.startsWith("http")) return;
 
   var isShell =
-    url.includes("index.html") ||
-    url.includes("finflow.html") ||
+    url.includes("index.html") || url.includes("finflow.html") ||
+    url.includes("manifest.json") ||
     url.includes("styles.css") ||
     url.includes("app.js") ||
     url.endsWith("/");
