@@ -1,130 +1,141 @@
-/* =============================================================
+/* =================================================================
    FinFlow — Service Worker
-   sw.js  |  v3.0
-   Author: Researcher Tizar
+   sw.js  |  v3.1  |  by Researcher Tizar
    License: MIT
 
-   Strategy:
-     - App shell (finflow.html): Cache-first
-     - CDN assets (Chart.js, FontAwesome, Fonts): Stale-while-revalidate
-     - All other GETs: Network-first with cache fallback
+   Cache strategies:
+   - App shell (finflow.html, styles.css, app.js): Cache-first
+   - CDN assets (Chart.js, FontAwesome, Fonts): Stale-while-revalidate
+   - Other GETs: Network-first with cache fallback
 
-   Works only when served over HTTP(S).
-   For file:// usage, an inline blob SW is registered by the app.
-============================================================= */
+   Note: Only active when served over HTTP/HTTPS.
+   For file:// usage, finflow.html registers an inline blob SW automatically.
+================================================================= */
 
-var CACHE = 'finflow-v3';
+var CACHE = "finflow-v3.3";
 
-var PRECACHE = [
-  './',
-  './finflow.html',
-  './styles.css',
-  './app.js'
+var APP_SHELL = [
+  "./",
+  "./finflow.html",
+  "./styles.css",
+  "./app.js",
+  "./icon-512.svg",
+  "./icon-192.svg",
 ];
 
-var CDN_CACHE = [
-  'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-regular-400.woff2',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
+var CDN_ASSETS = [
+  "https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-regular-400.woff2",
+  "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap",
 ];
 
-/* ── Install: precache app shell ── */
-self.addEventListener('install', function(event) {
-  console.log('[FinFlow SW] Install v3');
+/* ── Install ── */
+self.addEventListener("install", function (event) {
+  console.log("[FinFlow SW] Installing v3.1");
   event.waitUntil(
-    caches.open(CACHE).then(function(cache) {
-      // Precache app shell (must succeed)
-      return cache.addAll(PRECACHE).then(function() {
-        // Cache CDN assets (non-fatal failures)
-        return Promise.allSettled(
-          CDN_CACHE.map(function(url) {
-            return cache.add(url).catch(function(e) {
-              console.warn('[FinFlow SW] CDN cache skip:', url, e.message);
-            });
-          })
-        );
-      });
-    }).then(function() {
-      return self.skipWaiting();
-    })
+    caches
+      .open(CACHE)
+      .then(function (cache) {
+        return cache.addAll(APP_SHELL).then(function () {
+          return Promise.allSettled(
+            CDN_ASSETS.map(function (url) {
+              return cache.add(url).catch(function (e) {
+                console.warn("[FinFlow SW] CDN skip:", url, e.message);
+              });
+            }),
+          );
+        });
+      })
+      .then(function () {
+        return self.skipWaiting();
+      }),
   );
 });
 
-/* ── Activate: purge old caches ── */
-self.addEventListener('activate', function(event) {
-  console.log('[FinFlow SW] Activate v3');
+/* ── Activate ── */
+self.addEventListener("activate", function (event) {
+  console.log("[FinFlow SW] Activating v3.1");
   event.waitUntil(
-    caches.keys().then(function(keys) {
-      return Promise.all(
-        keys.filter(function(k) { return k !== CACHE; })
-            .map(function(k) {
-              console.log('[FinFlow SW] Delete old cache:', k);
-              return caches.delete(k);
+    caches
+      .keys()
+      .then(function (keys) {
+        return Promise.all(
+          keys
+            .filter(function (k) {
+              return k !== CACHE;
             })
-      );
-    }).then(function() {
-      return self.clients.claim();
-    })
+            .map(function (k) {
+              return caches.delete(k);
+            }),
+        );
+      })
+      .then(function () {
+        return self.clients.claim();
+      }),
   );
 });
 
-/* ── Fetch: cache strategies by URL type ── */
-self.addEventListener('fetch', function(event) {
+/* ── Fetch ── */
+self.addEventListener("fetch", function (event) {
   var req = event.request;
   var url = req.url;
+  if (req.method !== "GET" || !url.startsWith("http")) return;
 
-  if (req.method !== 'GET') return;
-  if (!url.startsWith('http')) return;
+  var isShell =
+    url.includes("finflow.html") ||
+    url.includes("styles.css") ||
+    url.includes("app.js") ||
+    url.endsWith("/");
+  var isCDN =
+    url.includes("cdn.jsdelivr.net") ||
+    url.includes("cloudflare.com") ||
+    url.includes("fonts.googleapis.com") ||
+    url.includes("fonts.gstatic.com");
 
-  var isAppShell = url.includes('finflow.html') || url.includes('styles.css') || url.includes('app.js') || url.endsWith('/');
-  var isCDN = url.includes('cdn.jsdelivr.net') || url.includes('cloudflare.com') || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com');
-
-  if (isAppShell) {
+  if (isShell) {
     /* Cache-first for app shell */
     event.respondWith(
-      caches.match(req).then(function(cached) {
+      caches.match(req).then(function (cached) {
         if (cached) return cached;
-        return fetch(req).then(function(resp) {
-          if (resp && resp.ok) {
-            var clone = resp.clone();
-            caches.open(CACHE).then(function(c) { c.put(req, clone); });
-          }
-          return resp;
+        return fetch(req).then(function (res) {
+          if (res && res.ok)
+            caches.open(CACHE).then(function (c) {
+              c.put(req, res.clone());
+            });
+          return res;
         });
-      })
+      }),
     );
-    return;
-  }
-
-  if (isCDN) {
+  } else if (isCDN) {
     /* Stale-while-revalidate for CDN */
     event.respondWith(
-      caches.open(CACHE).then(function(cache) {
-        return cache.match(req).then(function(cached) {
-          var fetchPromise = fetch(req).then(function(resp) {
-            if (resp && resp.status === 200) cache.put(req, resp.clone());
-            return resp;
-          }).catch(function() { return cached; });
-          return cached || fetchPromise;
+      caches.open(CACHE).then(function (cache) {
+        return cache.match(req).then(function (cached) {
+          var fresh = fetch(req)
+            .then(function (res) {
+              if (res && res.status === 200) cache.put(req, res.clone());
+              return res;
+            })
+            .catch(function () {
+              return cached;
+            });
+          return cached || fresh;
         });
-      })
+      }),
     );
-    return;
+  } else {
+    /* Network-first for everything else */
+    event.respondWith(
+      fetch(req).catch(function () {
+        return caches.match(req);
+      }),
+    );
   }
-
-  /* Network-first for everything else */
-  event.respondWith(
-    fetch(req).catch(function() {
-      return caches.match(req);
-    })
-  );
 });
 
-/* ── Message: force update ── */
-self.addEventListener('message', function(event) {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+/* ── Force update ── */
+self.addEventListener("message", function (event) {
+  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
 });
