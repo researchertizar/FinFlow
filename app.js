@@ -188,46 +188,7 @@ window.addEventListener("appinstalled", function () {
   upd();
 })();
 
-// Service Worker (cache-first, handles blob:// gracefully)
-(function () {
-  if (!("serviceWorker" in navigator)) return;
-  var pageUrl = location.href.replace(/[#?].*$/, "");
-  var sw =
-    "var C='wallet-v3';" +
-    "self.addEventListener('install',function(e){" +
-    "e.waitUntil(caches.open(C).then(function(c){return c.addAll(['" +
-    pageUrl.replace(/'/g, "\\'") +
-    "']).catch(function(){});}).catch(function(){}));" +
-    "self.skipWaiting();" +
-    "});" +
-    "self.addEventListener('activate',function(e){" +
-    "e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));" +
-    "self.clients.claim();" +
-    "});" +
-    "self.addEventListener('fetch',function(e){" +
-    "if(e.request.method!=='GET')return;" +
-    "e.respondWith(caches.match(e.request).then(function(cached){" +
-    "var net=fetch(e.request).then(function(r){" +
-    "if(r&&r.ok){var cl=r.clone();caches.open(C).then(function(c){c.put(e.request,cl);});}" +
-    "return r;" +
-    "}).catch(function(){return cached;});" +
-    "return cached||net;" +
-    "}));" +
-    "});";
-  try {
-    var blob = new Blob([sw], { type: "application/javascript" });
-    navigator.serviceWorker
-      .register(URL.createObjectURL(blob), { scope: "./" })
-      .then(function (r) {
-        console.log("[Wallet] SW ok, scope:", r.scope);
-      })
-      .catch(function (e) {
-        console.log("[Wallet] SW skipped:", e.message);
-      });
-  } catch (e) {
-    console.log("[Wallet] SW not available");
-  }
-})();
+// SW registration handled by engine (Section 2)
 
 // Swipe down to dismiss modals
 (function () {
@@ -4317,7 +4278,7 @@ function seedData() {
   // Fallback: inline blob SW for file:// opening
   var pageUrl = location.href.replace(/#.*$/, "");
   var swCode = [
-    "var CACHE_NAME = 'finflow-v3.3';",
+    "var CACHE_NAME = 'finflow-v3.4';",
     "var URLS_TO_CACHE = ['" + pageUrl + "'];",
     "self.addEventListener('install', function(e) {",
     "  e.waitUntil(caches.open(CACHE_NAME).then(function(cache) {",
