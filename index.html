@@ -8,19 +8,20 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="FinFlow">
-  <meta name="theme-color" content="#0d0d14" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#f5f5f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f0f11" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f7f5f2" media="(prefers-color-scheme: light)">
   <meta name="description"
     content="FinFlow — Personal Finance OS. Local-first, offline-ready. No sign-up, no cloud, no tracking.">
   <meta name="author" content="Researcher Tizar">
 
   <title>FinFlow — Personal Finance</title>
 
-  <!-- Favicon -->
+  <!-- App icon & favicon -->
+  <link rel="icon" type="image/svg+xml" href="icon-192.svg">
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%234f46e5'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EF%3C/text%3E%3C/svg%3E">
-  <link rel="apple-touch-icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%234f46e5'/%3E%3Ctext x='90' y='125' font-size='96' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EF%3C/text%3E%3C/svg%3E">
+    href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http://www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%235b52f0%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%239d8ffc%22/%3E%20%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22url(%23g)%22/%3E%20%3Crect%20x%3D%226%22%20y%3D%2220%22%20width%3D%224.5%22%20height%3D%227%22%20rx%3D%221.2%22%20fill%3D%22rgba(255,255,255,0.5)%22/%3E%20%3Crect%20x%3D%2213%22%20y%3D%2216%22%20width%3D%224.5%22%20height%3D%2211%22%20rx%3D%221.2%22%20fill%3D%22rgba(255,255,255,0.72)%22/%3E%20%3Crect%20x%3D%2220%22%20y%3D%2211%22%20width%3D%224.5%22%20height%3D%2216%22%20rx%3D%221.2%22%20fill%3D%22rgba(255,255,255,0.95)%22/%3E%20%3Cpolyline%20points%3D%228.25,20%2015.25,16%2022.25,11%2027,8%22%20stroke%3D%22white%22%20stroke-width%3D%221.8%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%20%3C/svg%3E">
+  <link rel="apple-touch-icon" href="icon-512.svg">
+  <link rel="mask-icon" href="icon-512.svg" color="#5b52f0">
 
   <!-- PWA Manifest (inline blob — works on file:// and HTTP) -->
   <link rel="manifest" id="pwa-manifest">
@@ -29,47 +30,84 @@
       try {
         var loc = location.href.replace(/[?#].*$/, '');
         var base = loc.substring(0, loc.lastIndexOf('/') + 1);
+        // Try external manifest.json first (HTTP), fall back to inline blob
+        var extManifest = base + 'manifest.json';
+        var useInline = location.protocol === 'file:';
         var m = {
-          id: 'finflow-v3', name: 'FinFlow — Personal Finance', short_name: 'FinFlow',
+          id: 'finflow-v3',
+          name: 'FinFlow — Personal Finance',
+          short_name: 'FinFlow',
           description: 'Personal Finance OS. Local-first, offline-ready, zero tracking.',
-          start_url: loc, scope: base, display: 'standalone',
+          start_url: loc,
+          scope: base,
+          display: 'standalone',
           display_override: ['standalone', 'minimal-ui'],
-          background_color: '#0d0d14', theme_color: '#4f46e5',
+          background_color: '#0f0f11',
+          theme_color: '#4f46e5',
           orientation: 'portrait-primary',
           categories: ['finance', 'productivity'],
           lang: 'en', dir: 'ltr',
           prefer_related_applications: false,
-          orientation: 'portrait-primary',
+          shortcuts: [
+            {
+              name: 'Add Transaction', short_name: 'Add', description: 'Add a new transaction quickly',
+              url: loc + '#transactions',
+              icons: [
+                // Embedded data: URI — works in both blob: and file: contexts
+                // Chrome requires 192x192+ for PWA install eligibility
+                { src: "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%235b52f0%22%2F%3E%20%3Cstop%20offset%3D%2260%25%22%20stop-color%3D%22%237c6dfa%22%2F%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%239d8ffc%22%2F%3E%20%3C%2FlinearGradient%3E%20%3ClinearGradient%20id%3D%22shine%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%220%25%22%20y2%3D%22100%25%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22rgba%28255%2C255%2C255%2C0.18%29%22%2F%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgba%28255%2C255%2C255%2C0%29%22%2F%3E%20%3C%2FlinearGradient%3E%20%3C%2Fdefs%3E%20%3C%21--%20Background%20with%20rounded%20corners%20--%3E%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22115%22%20fill%3D%22url%28%23bg%29%22%2F%3E%20%3C%21--%20Subtle%20inner%20shine%20--%3E%20%3Crect%20width%3D%22512%22%20height%3D%22256%22%20rx%3D%220%22%20fill%3D%22url%28%23shine%29%22%20opacity%3D%220.6%22%2F%3E%20%3C%21--%20Bar%201%20--%3E%20%3Crect%20x%3D%2296%22%20y%3D%22310%22%20width%3D%2272%22%20height%3D%22118%22%20rx%3D%2216%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.45%29%22%2F%3E%20%3C%21--%20Bar%202%20--%3E%20%3Crect%20x%3D%22200%22%20y%3D%22240%22%20width%3D%2272%22%20height%3D%22188%22%20rx%3D%2216%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.65%29%22%2F%3E%20%3C%21--%20Bar%203%20--%3E%20%3Crect%20x%3D%22304%22%20y%3D%22158%22%20width%3D%2272%22%20height%3D%22270%22%20rx%3D%2216%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.90%29%22%2F%3E%20%3C%21--%20Trend%20line%20--%3E%20%3Cpolyline%20points%3D%22132%2C310%20236%2C240%20340%2C158%20416%2C110%22%20stroke%3D%22white%22%20stroke-width%3D%2224%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20opacity%3D%220.95%22%2F%3E%20%3C%21--%20Arrowhead%20--%3E%20%3Cpolygon%20points%3D%22416%2C110%20374%2C120%20388%2C158%22%20fill%3D%22white%22%20opacity%3D%220.95%22%2F%3E%20%3C%21--%20FF%20monogram%20watermark%20--%3E%20%3Ctext%20x%3D%2276%22%20y%3D%22122%22%20font-family%3D%22-apple-system%2Csystem-ui%2Csans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2288%22%20letter-spacing%3D%22-6%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.14%29%22%3EFF%3C%2Ftext%3E%20%3C%2Fsvg%3E", sizes: '192x192', type: 'image/svg+xml' },
+                { src: "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%235b52f0%22%2F%3E%20%3Cstop%20offset%3D%2260%25%22%20stop-color%3D%22%237c6dfa%22%2F%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%239d8ffc%22%2F%3E%20%3C%2FlinearGradient%3E%20%3ClinearGradient%20id%3D%22shine%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%220%25%22%20y2%3D%22100%25%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22rgba%28255%2C255%2C255%2C0.18%29%22%2F%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgba%28255%2C255%2C255%2C0%29%22%2F%3E%20%3C%2FlinearGradient%3E%20%3C%2Fdefs%3E%20%3C%21--%20Background%20with%20rounded%20corners%20--%3E%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22115%22%20fill%3D%22url%28%23bg%29%22%2F%3E%20%3C%21--%20Subtle%20inner%20shine%20--%3E%20%3Crect%20width%3D%22512%22%20height%3D%22256%22%20rx%3D%220%22%20fill%3D%22url%28%23shine%29%22%20opacity%3D%220.6%22%2F%3E%20%3C%21--%20Bar%201%20--%3E%20%3Crect%20x%3D%2296%22%20y%3D%22310%22%20width%3D%2272%22%20height%3D%22118%22%20rx%3D%2216%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.45%29%22%2F%3E%20%3C%21--%20Bar%202%20--%3E%20%3Crect%20x%3D%22200%22%20y%3D%22240%22%20width%3D%2272%22%20height%3D%22188%22%20rx%3D%2216%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.65%29%22%2F%3E%20%3C%21--%20Bar%203%20--%3E%20%3Crect%20x%3D%22304%22%20y%3D%22158%22%20width%3D%2272%22%20height%3D%22270%22%20rx%3D%2216%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.90%29%22%2F%3E%20%3C%21--%20Trend%20line%20--%3E%20%3Cpolyline%20points%3D%22132%2C310%20236%2C240%20340%2C158%20416%2C110%22%20stroke%3D%22white%22%20stroke-width%3D%2224%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20opacity%3D%220.95%22%2F%3E%20%3C%21--%20Arrowhead%20--%3E%20%3Cpolygon%20points%3D%22416%2C110%20374%2C120%20388%2C158%22%20fill%3D%22white%22%20opacity%3D%220.95%22%2F%3E%20%3C%21--%20FF%20monogram%20watermark%20--%3E%20%3Ctext%20x%3D%2276%22%20y%3D%22122%22%20font-family%3D%22-apple-system%2Csystem-ui%2Csans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2288%22%20letter-spacing%3D%22-6%22%20fill%3D%22rgba%28255%2C255%2C255%2C0.14%29%22%3EFF%3C%2Ftext%3E%20%3C%2Fsvg%3E", sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' },
+                // External icons (work when served over HTTP)
+                { src: base + 'icon-512.svg', sizes: 'any', type: 'image/svg+xml' },
+                { src: base + 'icon-192.svg', sizes: '32x32', type: 'image/svg+xml' }
+              ]
+            },
+            {
+              name: 'Dashboard', short_name: 'Home', description: 'View your financial overview',
+              url: loc + '#dashboard',
+              icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='20' fill='%234338ca'/%3E%3Ctext x='48' y='65' font-size='45' text-anchor='middle' fill='white' font-family='Arial'%3E%E2%8A%9E%3C/text%3E%3C/svg%3E", sizes: '96x96' }]
+            }
+          ],
           icons: [
-            { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='44' fill='%234f46e5'/%3E%3Ctext x='96' y='135' font-size='108' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EW%3C/text%3E%3C/svg%3E", sizes: '192x192', type: 'image/svg+xml' },
-            { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%234f46e5'/%3E%3Ctext x='256' y='365' font-size='290' text-anchor='middle' fill='white' font-family='system-ui' font-weight='800'%3EW%3C/text%3E%3C/svg%3E", sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+            { src: base + 'icon-512.svg', sizes: '96x96', type: 'image/svg+xml' }
           ]
         };
         var blob = new Blob([JSON.stringify(m)], { type: 'application/manifest+json' });
         var link = document.getElementById('pwa-manifest');
         link.href = URL.createObjectURL(blob);
         link.type = 'application/manifest+json';
-        // Register external SW when served over HTTP
-        if (location.protocol !== 'file:' && 'serviceWorker' in navigator) {
-          navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function () { });
-        }
+        // Service Worker registration is handled by app.js
+        // (avoids double-registration when served over HTTP)
       } catch (e) { }
     })();
   </script>
 
-  <!-- External deps (CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Performance: preload & prefetch -->
+  <link rel="preload" href="styles.css" as="style">
+  <link rel="preload" href="app.js" as="script">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+  <!-- External Dependencies -->
+  <!-- Chart.js must load synchronously — app.js init depends on it -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print"
+    onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  </noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
     rel="stylesheet">
 
-  <!-- App styles -->
+  <!-- App Styles -->
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+
 
   <!-- TOASTS -->
   <div id="toasts"></div>
@@ -81,7 +119,7 @@
   </div>
   <div id="install-banner">
     <i class="fa-solid fa-rocket" style="color:var(--accent-h);font-size:15px;flex-shrink:0"></i>
-    <span style="flex:1;font-size:13px">Add <strong>Wallet</strong> to your home screen for the best experience</span>
+    <span style="flex:1;font-size:13px">Install <strong>FinFlow</strong> for the best offline experience</span>
     <button class="btn-p sm" onclick="installPWA()">Install</button>
     <button
       style="background:none;border:none;color:var(--fg3);cursor:pointer;padding:4px 8px;font-size:15px;line-height:1"
@@ -94,11 +132,14 @@
     <div id="sidebar">
       <div class="sb-brand" onclick="nav('dashboard')" title="Go to Dashboard" style="cursor:pointer">
         <div class="sb-logo" aria-label="FinFlow logo">
-          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-            <path d="M6 10h24M6 18h16M6 26h20" stroke="white" stroke-width="3" stroke-linecap="round" />
-            <circle cx="28" cy="26" r="5" fill="rgba(255,255,255,.25)" stroke="white" stroke-width="2" />
-            <path d="M26 26l1.5 1.5L30 24" stroke="white" stroke-width="1.5" stroke-linecap="round"
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            aria-hidden="true">
+            <rect x="3" y="22" width="5.5" height="10" rx="1.5" fill="rgba(255,255,255,0.50)" />
+            <rect x="11" y="17" width="5.5" height="15" rx="1.5" fill="rgba(255,255,255,0.72)" />
+            <rect x="19" y="11" width="5.5" height="21" rx="1.5" fill="rgba(255,255,255,0.95)" />
+            <polyline points="5.75,22 13.75,17 21.75,11 30,7" stroke="white" stroke-width="2.2" stroke-linecap="round"
               stroke-linejoin="round" />
+            <polygon points="30,7 25,9 26.5,13" fill="white" />
           </svg>
         </div>
         <div class="sb-brand-text">
@@ -136,12 +177,15 @@
       <div class="sb-footer">
         <div class="sb-storage">
           <div class="sb-dot"></div>
-          <div style="min-width:0">
-            <div
-              style="font-size:12px;font-weight:600;color:var(--fg2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-              Private · On Device</div>
+          <div style="min-width:0;flex:1">
+            <div style="font-size:11px;font-weight:700;color:var(--fg2);white-space:nowrap">🔒 Private &amp; On-Device
+            </div>
             <div id="storage-sz" style="font-size:10px;color:var(--fg3);margin-top:1px">Calculating…</div>
           </div>
+          <button class="tb-btn" onclick="showTutorial()" title="Help &amp; Tutorial"
+            style="width:28px;height:28px;font-size:12px;flex-shrink:0">
+            <i class="fa-solid fa-circle-question"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -179,15 +223,23 @@
             <span id="mlbl"></span>
             <button onclick="changeMonth(1)" aria-label="Next month"><i class="fa-solid fa-chevron-right"></i></button>
           </div>
-          <button class="tb-btn" onclick="toggleTheme()" title="Toggle theme (T)">
+          <button class="tb-btn tb-info-btn" id="tb-info-btn" onclick="showViewInfo()" title="Section info (?)"
+            aria-label="Section info">
+            <i class="fa-solid fa-circle-question"></i>
+          </button>
+          <button class="tb-btn" onclick="openCmd()" title="Command palette (⌘K or /)" aria-label="Command palette"
+            style="display:none" id="tb-cmd-btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <button class="tb-btn" onclick="toggleTheme()" title="Toggle theme (T)" aria-label="Toggle theme">
             <i class="fa-solid fa-circle-half-stroke"></i>
           </button>
           <button class="tb-btn" id="notif-btn" onclick="openNotifPanel()" aria-label="Alerts">
             <i class="fa-solid fa-bell"></i>
             <span class="notif-dot" id="notif-dot" style="display:none"></span>
           </button>
-          <button class="btn-p sm" onclick="openTxM()">
-            <i class="fa-solid fa-plus"></i> Add
+          <button class="btn-p sm" onclick="openTxM()" aria-label="Add transaction">
+            <i class="fa-solid fa-plus"></i><span class="tb-add-label"> Add</span>
           </button>
         </div>
       </div>
@@ -207,6 +259,14 @@
           </div>
 
           <!-- Quick action buttons -->
+          <div class="sec-hd" style="margin-bottom:10px">
+            <span class="sec-hd-left" style="display:flex;align-items:center;gap:8px">
+              <h3>Dashboard</h3>
+              <button class="info-btn" onclick="showViewInfo('dashboard')" aria-label="About dashboard"
+                title="What is this?"><i class="fa-solid fa-circle-question"></i></button>
+            </span>
+            <span style="font-size:11px;color:var(--fg3);font-weight:500" id="dash-date-label"></span>
+          </div>
           <div class="quick-btns">
             <button class="qb primary" onclick="openTxM('expense')"><i class="fa-solid fa-minus"></i> Spent
               Money</button>
@@ -227,7 +287,7 @@
               <div class="hero-pill"><i class="fa-solid fa-calendar-check"></i> <span id="nw-month"
                   style="display:none"></span>This month</div>
               <div id="nw-delta"
-                style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;backdrop-filter:blur(4px)">
+                style="display:inline-flex;align-items:center;gap:5px;background:rgba(0, 0, 0, 0.15);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;backdrop-filter:blur(4px)">
               </div>
               <div class="hero-pill"><i class="fa-solid fa-shield-check" style="color:rgba(255,255,255,.8)"></i> Data on
                 device</div>
@@ -291,7 +351,10 @@
             <button onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
           </div>
           <div class="sec-hd">
-            <h3>Transactions</h3>
+            <span class="sec-hd-left">
+              <h3>Transactions</h3><button class="info-btn" onclick="showViewInfo('transactions')"
+                title="What is this?"><i class="fa-solid fa-circle-question"></i></button>
+            </span>
             <div class="fr gap8">
               <button class="btn sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> CSV</button>
               <button class="btn-p sm" onclick="openTxM()"><i class="fa-solid fa-plus"></i> Add</button>
@@ -346,7 +409,10 @@
         <!-- ══ ACCOUNTS ══ -->
         <div class="view" id="view-accounts">
           <div class="sec-hd">
-            <h3>Accounts</h3>
+            <span class="sec-hd-left">
+              <h3>Accounts</h3><button class="info-btn" onclick="showViewInfo('accounts')" title="What is this?"><i
+                  class="fa-solid fa-circle-question"></i></button>
+            </span>
             <button class="btn-p sm" onclick="openAccM()"><i class="fa-solid fa-plus"></i> Add Account</button>
           </div>
           <!-- acc-grid: engine renders account cards here -->
@@ -380,7 +446,10 @@
         <!-- ══ BUDGET ══ -->
         <div class="view" id="view-budget">
           <div class="sec-hd">
-            <h3>Budgets</h3>
+            <span class="sec-hd-left">
+              <h3>Budgets</h3><button class="info-btn" onclick="showViewInfo('budget')" title="What is this?"><i
+                  class="fa-solid fa-circle-question"></i></button>
+            </span>
             <button class="btn-p sm" onclick="openBudM()"><i class="fa-solid fa-plus"></i> Set Budget</button>
           </div>
           <!-- bud-grid: engine renders budget cards here -->
@@ -390,7 +459,10 @@
         <!-- ══ GOALS ══ -->
         <div class="view" id="view-goals">
           <div class="sec-hd">
-            <h3>Savings Goals</h3>
+            <span class="sec-hd-left">
+              <h3>Savings Goals</h3><button class="info-btn" onclick="showViewInfo('goals')" title="What is this?"><i
+                  class="fa-solid fa-circle-question"></i></button>
+            </span>
             <button class="btn-p sm" onclick="openGoalM()"><i class="fa-solid fa-plus"></i> New Goal</button>
           </div>
           <div class="g2" id="goal-grid"></div>
@@ -399,7 +471,10 @@
         <!-- ══ RECURRING ══ -->
         <div class="view" id="view-recurring">
           <div class="sec-hd">
-            <h3>Recurring Payments</h3>
+            <span class="sec-hd-left">
+              <h3>Recurring</h3><button class="info-btn" onclick="showViewInfo('recurring')" title="What is this?"><i
+                  class="fa-solid fa-circle-question"></i></button>
+            </span>
             <button class="btn-p sm" onclick="openRcM()"><i class="fa-solid fa-plus"></i> Add</button>
           </div>
           <div class="g2">
@@ -421,7 +496,10 @@
         <!-- ══ CATEGORIES ══ -->
         <div class="view" id="view-categories">
           <div class="sec-hd">
-            <h3>Categories</h3>
+            <span class="sec-hd-left">
+              <h3>Categories</h3><button class="info-btn" onclick="showViewInfo('categories')" title="What is this?"><i
+                  class="fa-solid fa-circle-question"></i></button>
+            </span>
             <button class="btn-p sm" onclick="openCatM()"><i class="fa-solid fa-plus"></i> Add</button>
           </div>
           <div class="g2" id="cat-grid"></div>
@@ -430,7 +508,10 @@
         <!-- ══ REPORTS ══ -->
         <div class="view" id="view-reports">
           <div class="sec-hd" style="margin-bottom:0">
-            <h3>Reports</h3>
+            <span class="sec-hd-left">
+              <h3>Reports</h3><button class="info-btn" onclick="showViewInfo('reports')" title="What is this?"><i
+                  class="fa-solid fa-circle-question"></i></button>
+            </span>
             <button class="btn sm" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
           </div>
           <div class="tab-bar" style="margin-top:12px">
@@ -528,7 +609,10 @@
         <!-- ══ INSIGHTS ══ -->
         <div class="view" id="view-insights">
           <div class="sec-hd" style="margin-bottom:16px">
-            <h3>Insights</h3>
+            <span class="sec-hd-left">
+              <h3>Insights</h3><button class="info-btn" onclick="showViewInfo('insights')" title="What is this?"><i
+                  class="fa-solid fa-circle-question"></i></button>
+            </span>
             <span style="font-size:12px;color:var(--fg3)">From your data</span>
           </div>
           <!-- Engine renders insight cards and recommendations here -->
@@ -543,9 +627,10 @@
 
         <!-- ══ SETTINGS ══ -->
         <div class="view" id="view-settings">
-          <div class="sec-hd" style="margin-bottom:18px">
-            <h3>Settings</h3>
-          </div>
+          <div class="sec-hd" style="margin-bottom:18px"><span class="sec-hd-left">
+              <h3>Settings</h3><button class="info-btn" onclick="showViewInfo('settings')" title="What is this?"><i
+                  class="fa-solid fa-circle-question"></i></button>
+            </span></div>
           <div class="g2">
             <!-- Left column -->
             <div>
@@ -610,7 +695,25 @@
                       class="kbd"><kbd>B</kbd></span></div>
                   <div class="fb" style="margin-bottom:3px"><span>Toggle theme</span><span
                       class="kbd"><kbd>T</kbd></span></div>
-                  <div class="fb"><span>Navigate views</span><span class="kbd"><kbd>1</kbd>–<kbd>9</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Navigate views</span><span
+                      class="kbd"><kbd>1</kbd>–<kbd>9</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Section info</span><span
+                      class="kbd"><kbd>?</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Close / Go back</span><span
+                      class="kbd"><kbd>Esc</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Prev / Next month</span><span
+                      class="kbd"><kbd>←</kbd><kbd>→</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Add transaction</span><span
+                      class="kbd"><kbd>N</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Command palette</span><span
+                      class="kbd"><kbd>/</kbd></span></div>
+                  <div class="fb" style="margin-bottom:3px"><span>Settings</span><span class="kbd"><kbd>0</kbd></span>
+                  </div>
+                  <div class="fb"><span>All shortcuts</span><span class="kbd"><kbd>?</kbd></span></div>
+                  <div style="margin-top:10px">
+                    <button class="btn sm" onclick="openKbdPanel()" style="width:100%"><i
+                        class="fa-solid fa-keyboard"></i> View Full Shortcut Reference</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -650,14 +753,33 @@
                 </div>
               </div>
               <div class="set-sec">
-                <div class="set-sec-hd"><i class="fa-solid fa-mobile-screen"></i> App</div>
+                <div class="set-sec-hd"><i class="fa-solid fa-mobile-screen"></i> App &amp; Install</div>
                 <div class="set-row">
                   <div class="set-row-info">
                     <h4>Install as App</h4>
-                    <p>Add to home screen</p>
+                    <p>Add to home screen for offline use</p>
                   </div>
                   <button class="btn sm" id="install-btn" onclick="installPWA()" style="display:none"><i
                       class="fa-solid fa-download"></i> Install</button>
+                  <button class="btn sm" id="install-ios-hint"
+                    onclick="toast('On iOS: tap Share → Add to Home Screen','inf',6000)" style="display:none"><i
+                      class="fa-brands fa-apple"></i> iOS Guide</button>
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Deploy to Web</h4>
+                    <p>Host on GitHub Pages for free</p>
+                  </div>
+                  <button class="btn sm" onclick="document.getElementById('mo-deploy').classList.add('vis')"><i
+                      class="fa-brands fa-github"></i> Deploy Guide</button>
+                </div>
+                <div class="set-row">
+                  <div class="set-row-info">
+                    <h4>Tutorial</h4>
+                    <p>Walkthrough for new users</p>
+                  </div>
+                  <button class="btn sm" onclick="showTutorial()"><i class="fa-solid fa-graduation-cap"></i>
+                    Open</button>
                 </div>
                 <div class="set-row">
                   <div class="set-row-info">
@@ -668,18 +790,38 @@
                 </div>
                 <div class="set-row">
                   <div class="set-row-info">
-                    <h4>Delete All Data</h4>
-                    <p style="color:var(--red)">Permanently erase everything</p>
+                    <h4>Erase All Data</h4>
+                    <p style="color:var(--red)">Permanently delete everything</p>
                   </div>
                   <button class="btn sm danger" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Erase</button>
                 </div>
               </div>
               <div class="set-sec">
                 <div class="set-sec-hd"><i class="fa-solid fa-circle-info"></i> About</div>
-                <div class="cd" style="font-size:13px;color:var(--fg3);line-height:1.9">
-                  <p><strong style="color:var(--fg)">Wallet</strong> — Personal Finance</p>
-                  <p>Version 3.0 · No sign-up required.</p>
-                  <p>All data stays privately on your device.</p>
+                <div class="cd" style="font-size:13px;color:var(--fg3);line-height:1.9;margin-bottom:10px">
+                  <div class="fb" style="margin-bottom:8px">
+                    <strong style="color:var(--fg);font-size:15px">FinFlow</strong>
+                    <span class="tag">v3.0</span>
+                  </div>
+                  <p>Personal Finance OS — local-first, offline-ready.</p>
+                  <p>No sign-up · No cloud · No tracking · No ads.</p>
+                  <p style="margin-top:8px">Your data never leaves this device.</p>
+                </div>
+                <div class="credits-card">
+                  <div class="credits-tag"><i class="fa-solid fa-code"></i> Built by</div>
+                  <div class="credits-name">Researcher Tizar</div>
+                  <div class="credits-role">
+                    Researcher · Developer · Designer<br>
+                    Designed for simplicity, built for everyone.
+                  </div>
+                  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+                    <button class="btn sm" onclick="showTutorial()" style="gap:6px">
+                      <i class="fa-solid fa-graduation-cap"></i> View Tutorial
+                    </button>
+                    <button class="btn sm" onclick="resetSeedData()" style="gap:6px">
+                      <i class="fa-solid fa-rotate"></i> Load Demo Data
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -689,6 +831,214 @@
       </div><!-- /#content -->
     </div><!-- /#mw -->
   </div><!-- /#app -->
+
+
+  <!-- ══ TUTORIAL OVERLAY ══ -->
+  <div id="tutorial-overlay" class="hidden">
+    <div class="tutorial-card">
+      <div class="tut-progress">
+        <div class="tut-progress-fill" id="tut-progress" style="width:14%"></div>
+      </div>
+
+      <!-- Step 1: Welcome -->
+      <div class="tut-step active" id="tut-step-1">
+        <span class="tut-emoji">👋</span>
+        <div class="tut-title">Welcome to FinFlow</div>
+        <div class="tut-body">
+          Your personal money tracker — simple, private, and completely free.<br><br>
+          <strong>No account needed.</strong> Everything stays on <em>your device only</em>.
+        </div>
+        <div class="tut-items">
+          <li>
+            <div class="tut-ic" style="background:var(--green2);color:var(--green)"><i class="fa-solid fa-lock"></i>
+            </div><span><strong>100% Private</strong> — no sign-up, no cloud, no tracking</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--ac2);color:var(--accent-h)"><i
+                class="fa-solid fa-wifi-slash"></i></div><span><strong>Works Offline</strong> — all data saved locally
+              on your phone</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--amber2);color:var(--amber)"><i class="fa-solid fa-bolt"></i>
+            </div><span><strong>Super Fast</strong> — record a payment in under 5 seconds</span>
+          </li>
+        </div>
+      </div>
+
+      <!-- Step 2: How money flows -->
+      <div class="tut-step" id="tut-step-2">
+        <span class="tut-emoji">💸</span>
+        <div class="tut-title">Track Your Money</div>
+        <div class="tut-body">There are only 3 things you can record:</div>
+        <div class="tut-items">
+          <li>
+            <div class="tut-ic" style="background:var(--red2);color:var(--red)"><i class="fa-solid fa-arrow-down"></i>
+            </div><span><strong>Spent</strong> — money you paid out (groceries, rent, coffee)</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--green2);color:var(--green)"><i class="fa-solid fa-arrow-up"></i>
+            </div><span><strong>Received</strong> — money coming in (salary, freelance, gift)</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--ac2);color:var(--accent-h)"><i
+                class="fa-solid fa-right-left"></i></div><span><strong>Transfer</strong> — moving money between your own
+              accounts</span>
+          </li>
+        </div>
+        <div class="tut-body" style="margin-top:4px;font-size:13px">
+          Tap the <span class="tut-highlight"><i class="fa-solid fa-plus"></i> Add</span> button or the <span
+            class="tut-highlight">+</span> circle at the bottom anytime.
+        </div>
+      </div>
+
+      <!-- Step 3: Accounts -->
+      <div class="tut-step" id="tut-step-3">
+        <span class="tut-emoji">🏦</span>
+        <div class="tut-title">Add Your Accounts</div>
+        <div class="tut-body">
+          An <strong>account</strong> is simply a place where you keep money.<br>
+          Think of it like setting up your wallet sections.
+        </div>
+        <div class="tut-items">
+          <li>
+            <div class="tut-ic" style="background:var(--ac2);color:var(--accent-h)"><i
+                class="fa-solid fa-building-columns"></i></div><span><strong>Checking</strong> — your everyday bank
+              account</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--green2);color:var(--green)"><i
+                class="fa-solid fa-piggy-bank"></i></div><span><strong>Savings</strong> — money set aside for
+              later</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--red2);color:var(--red)"><i class="fa-solid fa-credit-card"></i>
+            </div><span><strong>Credit Card</strong> — money you owe (enter as negative)</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--amber2);color:var(--amber)"><i
+                class="fa-solid fa-money-bills"></i></div><span><strong>Cash</strong> — physical money in your
+              pocket</span>
+          </li>
+        </div>
+      </div>
+
+      <!-- Step 4: Categories -->
+      <div class="tut-step" id="tut-step-4">
+        <span class="tut-emoji">🏷️</span>
+        <div class="tut-title">Categories = Labels</div>
+        <div class="tut-body">
+          Categories help you see <strong>where your money goes</strong>.<br>
+          We've already set up common ones for you!
+        </div>
+        <div class="tut-items">
+          <li>
+            <div class="tut-ic" style="background:var(--green2);color:var(--green)"><i
+                class="fa-solid fa-basket-shopping"></i></div><span><strong>Groceries, Dining</strong> — food
+              spending</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--sky2);color:var(--sky)"><i class="fa-solid fa-car"></i></div>
+            <span><strong>Transport</strong> — fuel, bus, taxi</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--amber2);color:var(--amber)"><i class="fa-solid fa-bolt"></i>
+            </div><span><strong>Utilities</strong> — electricity, water, internet</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--ac2);color:var(--accent-h)"><i
+                class="fa-solid fa-sack-dollar"></i></div><span><strong>Salary</strong> — regular income from
+              work</span>
+          </li>
+        </div>
+      </div>
+
+      <!-- Step 5: Budgets -->
+      <div class="tut-step" id="tut-step-5">
+        <span class="tut-emoji">🎯</span>
+        <div class="tut-title">Set Spending Limits</div>
+        <div class="tut-body">
+          A <strong>budget</strong> is a monthly spending limit for a category.<br>
+          Like saying "I'll spend max ₹5,000 on food this month."
+        </div>
+        <div class="tut-items">
+          <li>
+            <div class="tut-ic" style="background:var(--green2);color:var(--green)"><i class="fa-solid fa-check"></i>
+            </div><span>Green bar = you're on track 👍</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--amber2);color:var(--amber)"><i
+                class="fa-solid fa-triangle-exclamation"></i></div><span>Yellow stripes = getting close to limit
+              ⚠️</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--red2);color:var(--red)"><i class="fa-solid fa-xmark"></i></div>
+            <span>Red = over budget — time to be careful 🛑</span>
+          </li>
+        </div>
+      </div>
+
+      <!-- Step 6: Goals -->
+      <div class="tut-step" id="tut-step-6">
+        <span class="tut-emoji">⭐</span>
+        <div class="tut-title">Savings Goals</div>
+        <div class="tut-body">
+          Set a goal to save for something you want — a vacation, new phone, emergency fund, or anything!<br><br>
+          Track how much you've saved vs your target.
+        </div>
+        <div class="tut-items">
+          <li>
+            <div class="tut-ic" style="background:var(--purple2);color:var(--purple)"><i class="fa-solid fa-plane"></i>
+            </div><span><strong>Vacation Fund</strong> — save ₹30,000 for a trip</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--green2);color:var(--green)"><i
+                class="fa-solid fa-shield-heart"></i></div><span><strong>Emergency Fund</strong> — 3-6 months of
+              expenses</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--amber2);color:var(--amber)"><i
+                class="fa-solid fa-mobile-screen"></i></div><span><strong>New Device</strong> — save up gradually</span>
+          </li>
+        </div>
+      </div>
+
+      <!-- Step 7: You're ready -->
+      <div class="tut-step" id="tut-step-7">
+        <span class="tut-emoji">🚀</span>
+        <div class="tut-title">You're All Set!</div>
+        <div class="tut-body">
+          You're all set! Start by adding your accounts, then record your first transaction.<br><br>
+          <strong>Tip:</strong> go to <span class="tut-highlight">Settings → Load Demo Data</span> if you'd like
+          to explore with sample numbers first.
+        </div>
+        <div class="tut-items">
+          <li>
+            <div class="tut-ic" style="background:var(--ac2);color:var(--accent-h)"><i class="fa-solid fa-house"></i>
+            </div><span><strong>Home</strong> — see your total balance and recent spending</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--green2);color:var(--green)"><i class="fa-solid fa-plus"></i>
+            </div><span>Tap <strong>+</strong> button anytime to record a payment</span>
+          </li>
+          <li>
+            <div class="tut-ic" style="background:var(--amber2);color:var(--amber)"><i class="fa-solid fa-gear"></i>
+            </div><span><strong>Settings</strong> — change currency, theme, export data</span>
+          </li>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <div class="tut-nav">
+        <div class="tut-dots" id="tut-dots"></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="tut-skip" onclick="closeTutorial()">Skip</button>
+          <button class="tut-next" id="tut-next-btn" onclick="tutNext()">
+            Next <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ══ MOBILE BOTTOM NAV ══ -->
   <div id="bottom-nav">
@@ -720,6 +1070,10 @@
 
   <!-- Mobile more menu -->
   <div id="mobile-more-menu">
+    <div class="mm-item" onclick="openCmd();closeMobileMore()"><i class="fa-solid fa-magnifying-glass"
+        style="color:var(--accent-h)!important"></i> Command Palette</div>
+    <div class="mm-item" onclick="showTutorial();closeMobileMore()"><i class="fa-solid fa-graduation-cap"
+        style="color:var(--amber)!important"></i> Tutorial</div>
     <div class="mm-item" onclick="nav('budget');closeMobileMore()"><i class="fa-solid fa-scale-balanced"></i> Budgets
     </div>
     <div class="mm-item" onclick="nav('goals');closeMobileMore()"><i class="fa-solid fa-bullseye"></i> Goals</div>
@@ -729,6 +1083,76 @@
     <div class="mm-item" onclick="nav('recurring');closeMobileMore()"><i class="fa-solid fa-rotate"></i> Recurring</div>
     <div class="mm-item" onclick="nav('categories');closeMobileMore()"><i class="fa-solid fa-tags"></i> Categories</div>
     <div class="mm-item" onclick="nav('settings');closeMobileMore()"><i class="fa-solid fa-gear"></i> Settings</div>
+  </div>
+
+
+  <!-- ══ VIEW INFO MODAL ══ -->
+  <div class="mo" id="mo-info" style="z-index:500">
+    <div class="mo-box" style="max-width:400px">
+      <div class="mo-hd">
+        <h3 id="info-title" style="display:flex;align-items:center;gap:9px"><i id="info-icon"
+            class="fa-solid fa-circle-info" style="color:var(--accent-h)"></i><span id="info-title-text">About</span>
+        </h3>
+        <button class="mo-close" onclick="document.getElementById('mo-info').classList.remove('vis')"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body" id="info-body"></div>
+      <div class="mo-ft" style="justify-content:space-between">
+        <button class="btn sm" onclick="showTutorial();document.getElementById('mo-info').classList.remove('vis')"><i
+            class="fa-solid fa-graduation-cap"></i> Full Tutorial</button>
+        <button class="btn-p sm" onclick="document.getElementById('mo-info').classList.remove('vis')">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ GITHUB / DEPLOY MODAL ══ -->
+  <div class="mo" id="mo-deploy">
+    <div class="mo-box" style="max-width:460px">
+      <div class="mo-hd">
+        <h3 style="display:flex;align-items:center;gap:9px"><i class="fa-brands fa-github"></i> Deploy to GitHub Pages
+        </h3>
+        <button class="mo-close" onclick="document.getElementById('mo-deploy').classList.remove('vis')"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mo-body">
+        <div class="cd" style="margin-bottom:12px;background:var(--bg3)">
+          <div
+            style="font-size:12px;font-weight:700;color:var(--fg3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">
+            3-Step Deployment</div>
+          <div class="deploy-step"><span class="deploy-num">1</span>
+            <div><strong>Create a repo</strong> on GitHub.com<br><span style="color:var(--fg3);font-size:12px">Settings
+                → Pages → Source: main branch</span></div>
+          </div>
+          <div class="deploy-step"><span class="deploy-num">2</span>
+            <div><strong>Upload 3 files</strong> to your repo root<br><code
+                class="deploy-code">finflow.html &nbsp; sw.js &nbsp; manifest.json</code></div>
+          </div>
+          <div class="deploy-step"><span class="deploy-num">3</span>
+            <div><strong>Your app is live</strong> at<br><code
+                class="deploy-code">https://username.github.io/repo-name/finflow.html</code></div>
+          </div>
+        </div>
+        <div class="cd" style="background:var(--green2);border-color:rgba(34,197,94,.2)">
+          <div style="font-size:13px;color:var(--fg2);line-height:1.7">
+            <i class="fa-solid fa-circle-check" style="color:var(--green)"></i> <strong>Full PWA</strong> — Install to
+            home screen, works offline<br>
+            <i class="fa-solid fa-circle-check" style="color:var(--green)"></i> <strong>Free hosting</strong> — GitHub
+            Pages is 100% free<br>
+            <i class="fa-solid fa-circle-check" style="color:var(--green)"></i> <strong>HTTPS included</strong> —
+            required for service workers &amp; PWA install
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--fg3);text-align:center">
+          Or run locally: <code class="deploy-code">python -m http.server 8080</code> then open <code
+            class="deploy-code">localhost:8080/finflow.html</code>
+        </div>
+      </div>
+      <div class="mo-ft">
+        <button class="btn sm" onclick="document.getElementById('mo-deploy').classList.remove('vis')">Close</button>
+        <a href="https://github.com/new" target="_blank" class="btn-p sm" style="text-decoration:none"><i
+            class="fa-brands fa-github"></i> Open GitHub</a>
+      </div>
+    </div>
   </div>
 
   <!-- ══ MODALS ══ -->
@@ -757,6 +1181,14 @@
             <input type="number" id="tx-amount" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
           </div>
           <div class="err-msg" id="e-amount"></div>
+          <div class="amount-chips" id="amount-chips">
+            <span class="amount-chip" onclick="setAmtChip(10)">10</span>
+            <span class="amount-chip" onclick="setAmtChip(50)">50</span>
+            <span class="amount-chip" onclick="setAmtChip(100)">100</span>
+            <span class="amount-chip" onclick="setAmtChip(500)">500</span>
+            <span class="amount-chip" onclick="setAmtChip(1000)">1,000</span>
+            <span class="amount-chip" onclick="setAmtChip(5000)">5,000</span>
+          </div>
         </div>
         <div class="fg-row">
           <label>What was it for?</label>
@@ -819,7 +1251,7 @@
         <input type="hidden" id="acc-id">
         <div class="fg-row">
           <label>Account Name</label>
-          <input type="text" id="acc-name" placeholder="e.g. Main Checking, Savings…">
+          <input type="text" id="acc-name" placeholder="e.g. Everyday Account, Savings…">
           <div class="err-msg" id="e-acc-name"></div>
         </div>
         <div class="frow2">
@@ -1077,7 +1509,119 @@
    APP SCRIPTS
 ══════════════════════════════════════════ -->
 
-  <!-- App logic (load last so DOM is ready) -->
+
+  <!-- ══ COMMAND PALETTE ══ -->
+  <div id="cmd-palette" role="dialog" aria-label="Command palette" aria-modal="true">
+    <div class="cmd-box">
+      <div class="cmd-input-wrap">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input type="text" id="cmd-input" placeholder="Type a command or search…" autocomplete="off" spellcheck="false"
+          autocorrect="off">
+        <span class="kk" style="font-size:11px">Esc</span>
+      </div>
+      <div class="cmd-results" id="cmd-results"></div>
+      <div class="cmd-hint">
+        <span><span class="kk">↑</span><span class="kk">↓</span> navigate</span>
+        <span><span class="kk">↵</span> select</span>
+        <span><span class="kk">Esc</span> close</span>
+        <span><span class="kk">⌘K</span> toggle</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ KEYBOARD SHORTCUTS PANEL ══ -->
+  <div id="kbd-panel" role="dialog" aria-label="Keyboard shortcuts" aria-modal="true">
+    <div class="kbd-panel-box">
+      <div class="kbd-panel-hd">
+        <h3><i class="fa-solid fa-keyboard" style="color:var(--accent-h);margin-right:8px"></i>Keyboard Shortcuts</h3>
+        <button class="mo-close" onclick="closeKbdPanel()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="kbd-grid">
+
+        <div class="kbd-section">
+          <div class="kbd-section-title"><i class="fa-solid fa-compass"></i> Navigation</div>
+          <div class="kbd-row"><span class="kbd-row-label">Home / Dashboard</span><span class="kbd-keys"><span
+                class="kk">1</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Transactions</span><span class="kbd-keys"><span
+                class="kk">2</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Accounts</span><span class="kbd-keys"><span
+                class="kk">3</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Budgets</span><span class="kbd-keys"><span
+                class="kk">4</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Goals</span><span class="kbd-keys"><span
+                class="kk">5</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Reports</span><span class="kbd-keys"><span
+                class="kk">6</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Insights</span><span class="kbd-keys"><span
+                class="kk">7</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Recurring</span><span class="kbd-keys"><span
+                class="kk">8</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Categories</span><span class="kbd-keys"><span
+                class="kk">9</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Settings</span><span class="kbd-keys"><span
+                class="kk">0</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Go back</span><span class="kbd-keys"><span
+                class="kk">Backspace</span></span></div>
+        </div>
+
+        <div class="kbd-section">
+          <div class="kbd-section-title"><i class="fa-solid fa-bolt"></i> Quick Actions</div>
+          <div class="kbd-row"><span class="kbd-row-label">Add Transaction</span><span class="kbd-keys"><span
+                class="kk">⌘</span><span class="kk">N</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Add Transaction</span><span class="kbd-keys"><span
+                class="kk">N</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Add Account</span><span class="kbd-keys"><span
+                class="kk">A</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Command Palette</span><span class="kbd-keys"><span
+                class="kk">⌘</span><span class="kk">K</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Command Palette</span><span class="kbd-keys"><span
+                class="kk">/</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Export Backup</span><span class="kbd-keys"><span
+                class="kk">⌘</span><span class="kk">E</span></span></div>
+          <div class="kbd-row" style="margin-top:8px">
+            <div class="kbd-section-title" style="margin:0"><i class="fa-solid fa-calendar"></i> Month</div>
+          </div>
+          <div class="kbd-row"><span class="kbd-row-label">Previous month</span><span class="kbd-keys"><span
+                class="kk">←</span> <span class="kk-or">or</span> <span class="kk">J</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Next month</span><span class="kbd-keys"><span
+                class="kk">→</span> <span class="kk-or">or</span> <span class="kk">L</span></span></div>
+          <div class="kbd-row" style="margin-top:8px">
+            <div class="kbd-section-title" style="margin:0"><i class="fa-solid fa-palette"></i> UI</div>
+          </div>
+          <div class="kbd-row"><span class="kbd-row-label">Toggle sidebar</span><span class="kbd-keys"><span
+                class="kk">⌘</span><span class="kk">B</span> <span class="kk-or">or</span> <span
+                class="kk">B</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Toggle theme</span><span class="kbd-keys"><span
+                class="kk">T</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">This help panel</span><span class="kbd-keys"><span
+                class="kk">?</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Section info</span><span class="kbd-keys"><span
+                class="kk">?</span></span></div>
+          <div class="kbd-row"><span class="kbd-row-label">Close / Go back</span><span class="kbd-keys"><span
+                class="kk">Esc</span></span></div>
+        </div>
+
+        <div class="kbd-section" style="grid-column:1/-1;border-top:1px solid var(--bdr);padding-top:14px">
+          <div class="kbd-section-title"><i class="fa-solid fa-chart-bar"></i> Reports Tabs (when in Reports view)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <div class="kbd-row" style="min-width:140px;border:none;padding:4px 0"><span
+                class="kbd-row-label">Overview</span><span class="kbd-keys"><span class="kk">O</span></span></div>
+            <div class="kbd-row" style="min-width:140px;border:none;padding:4px 0"><span
+                class="kbd-row-label">Spending</span><span class="kbd-keys"><span class="kk">S</span></span></div>
+            <div class="kbd-row" style="min-width:140px;border:none;padding:4px 0"><span
+                class="kbd-row-label">Income</span><span class="kbd-keys"><span class="kk">I</span></span></div>
+            <div class="kbd-row" style="min-width:140px;border:none;padding:4px 0"><span class="kbd-row-label">Cash
+                Flow</span><span class="kbd-keys"><span class="kk">C</span></span></div>
+            <div class="kbd-row" style="min-width:140px;border:none;padding:4px 0"><span class="kbd-row-label">Net
+                Worth</span><span class="kbd-keys"><span class="kk">W</span></span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- App Logic (loaded last so DOM is ready) -->
   <script src="app.js"></script>
 
 </body>
