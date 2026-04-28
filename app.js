@@ -397,7 +397,7 @@ var A = [],
   BG = [],
   GL = [],
   RC = [];
-var PR = { theme: "dark", currency: "$", dateFormat: "MM/DD/YYYY", name: "" };
+var PR = { theme: "dark", currency: "₹", dateFormat: "MM/DD/YYYY", name: "" };
 var charts = {};
 var currentMonth = new Date().getMonth();
 var currentYear = new Date().getFullYear();
@@ -512,7 +512,7 @@ function updateMobileMonthLabels() {
 function fm(n, raw) {
   try {
     if (typeof n !== "number" || isNaN(n)) n = 0;
-    var sym = PR.currency || "$";
+    var sym = PR.currency || "₹";
     var abs = Math.abs(n);
     var s;
     if (abs >= 1000000) s = (abs / 1000000).toFixed(1) + "M";
@@ -524,13 +524,13 @@ function fm(n, raw) {
       });
     return (n < 0 ? "-" : "") + sym + s;
   } catch (e) {
-    return (PR.currency || "$") + "0.00";
+    return (PR.currency || "₹") + "0.00";
   }
 }
 function fmFull(n) {
   try {
     if (typeof n !== "number" || isNaN(n)) n = 0;
-    var sym = PR.currency || "$";
+    var sym = PR.currency || "₹";
     var abs = Math.abs(n);
     return (
       (n < 0 ? "-" : "") +
@@ -541,7 +541,7 @@ function fmFull(n) {
       })
     );
   } catch (e) {
-    return (PR.currency || "$") + "0.00";
+    return (PR.currency || "₹") + "0.00";
   }
 }
 function fmDate(d) {
@@ -699,7 +699,7 @@ function savePref() {
   updCurrencySymbols();
 }
 function updCurrencySymbols() {
-  var sym = PR.currency || "$";
+  var sym = PR.currency || "₹";
   [
     "tx-currency-sym",
     "acc-currency-sym",
@@ -3786,7 +3786,7 @@ function closeNotifPanel() {
 // ══════════════════════════════════════════════
 function renderSettings() {
   var cur = document.getElementById("s-currency");
-  if (cur) cur.value = PR.currency || "$";
+  if (cur) cur.value = PR.currency || "₹";
   var dfmt = document.getElementById("s-dateformat");
   if (dfmt) dfmt.value = PR.dateFormat || "MM/DD/YYYY";
   var nm = document.getElementById("s-name");
