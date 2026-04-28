@@ -397,7 +397,7 @@ var A = [],
   BG = [],
   GL = [],
   RC = [];
-var PR = { theme: "dark", currency: "₹", dateFormat: "MM/DD/YYYY", name: "" };
+var PR = { theme: "dark", currency: "$", dateFormat: "MM/DD/YYYY", name: "" };
 var charts = {};
 var currentMonth = new Date().getMonth();
 var currentYear = new Date().getFullYear();
@@ -512,7 +512,7 @@ function updateMobileMonthLabels() {
 function fm(n, raw) {
   try {
     if (typeof n !== "number" || isNaN(n)) n = 0;
-    var sym = PR.currency || "₹";
+    var sym = PR.currency || "$";
     var abs = Math.abs(n);
     var s;
     if (abs >= 1000000) s = (abs / 1000000).toFixed(1) + "M";
@@ -524,13 +524,13 @@ function fm(n, raw) {
       });
     return (n < 0 ? "-" : "") + sym + s;
   } catch (e) {
-    return (PR.currency || "₹") + "0.00";
+    return (PR.currency || "$") + "0.00";
   }
 }
 function fmFull(n) {
   try {
     if (typeof n !== "number" || isNaN(n)) n = 0;
-    var sym = PR.currency || "₹";
+    var sym = PR.currency || "$";
     var abs = Math.abs(n);
     return (
       (n < 0 ? "-" : "") +
@@ -541,7 +541,7 @@ function fmFull(n) {
       })
     );
   } catch (e) {
-    return (PR.currency || "₹") + "0.00";
+    return (PR.currency || "$") + "0.00";
   }
 }
 function fmDate(d) {
@@ -699,7 +699,7 @@ function savePref() {
   updCurrencySymbols();
 }
 function updCurrencySymbols() {
-  var sym = PR.currency || "₹";
+  var sym = PR.currency || "$";
   [
     "tx-currency-sym",
     "acc-currency-sym",
@@ -3786,7 +3786,7 @@ function closeNotifPanel() {
 // ══════════════════════════════════════════════
 function renderSettings() {
   var cur = document.getElementById("s-currency");
-  if (cur) cur.value = PR.currency || "₹";
+  if (cur) cur.value = PR.currency || "$";
   var dfmt = document.getElementById("s-dateformat");
   if (dfmt) dfmt.value = PR.dateFormat || "MM/DD/YYYY";
   var nm = document.getElementById("s-name");
@@ -4278,7 +4278,7 @@ function seedData() {
   // Fallback: inline blob SW for file:// opening
   var pageUrl = location.href.replace(/#.*$/, "");
   var swCode = [
-    "var CACHE_NAME = 'finflow-v3.4';",
+    "var CACHE_NAME = 'finflow-v3.5';",
     "var URLS_TO_CACHE = ['" + pageUrl + "'];",
     "self.addEventListener('install', function(e) {",
     "  e.waitUntil(caches.open(CACHE_NAME).then(function(cache) {",
@@ -5982,3 +5982,373 @@ function setAmtChip(val) {
     inp.focus();
   }
 }
+
+
+/* =================================================================
+   GOOGLE ANALYTICS 4 — FinFlow Event Tracking
+   Measurement ID: G-XXXXXXXXXX (replace in index.html)
+
+   Events tracked:
+     page_view         — every section navigation
+     transaction_add   — new transaction saved
+     transaction_edit  — existing transaction edited
+     account_add       — new account created
+     budget_set        — budget created or updated
+     goal_create       — new savings goal created
+     export_data       — JSON backup downloaded
+     export_csv        — CSV downloaded
+     import_data       — backup restored
+     app_install       — PWA installed
+     tutorial_start    — tutorial opened
+     tutorial_complete — tutorial finished (step 7)
+     theme_toggle      — dark/light switched
+     search_used       — global search used
+     scroll_60         — 60% content scroll depth
+     time_30s          — 30s active session
+     time_5m           — 5min active session
+     command_used      — command palette action
+     error_occurred    — runtime error caught
+================================================================= */
+
+(function () {
+  'use strict';
+
+  // ── Safe tracker (no-ops if gtag not ready or disabled) ──
+  function track(event, params) {
+    if (typeof window._track === 'function') {
+      window._track(event, params);
+    }
+  }
+
+  // ── Helper: get current app state for event context ──
+  function appCtx() {
+    return {
+      app_theme:  document.body.classList.contains('light') ? 'light' : 'dark',
+      has_data:   (typeof A !== 'undefined' && A.length > 0) ? 'yes' : 'no',
+      view:       (typeof currentView !== 'undefined') ? currentView : 'unknown'
+    };
+  }
+
+  // ──────────────────────────────────────────────────────────
+  //  PAGE_VIEW — fires on every navigation (SPA virtual pages)
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _orig = typeof _applyNav === 'function' ? _applyNav : null;
+    if (!_orig) return;
+    window._applyNav = function (view, sub, extra) {
+      try { _orig(view, sub, extra); } catch (e) {}
+      var title = (typeof PAGE_META !== 'undefined' && PAGE_META[view])
+        ? PAGE_META[view].title + ' — FinFlow'
+        : view + ' — FinFlow';
+      track('page_view', {
+        page_title:    title,
+        page_location: location.href,
+        page_path:     '#' + view
+      });
+    };
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  TRANSACTION EVENTS
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _origSave = typeof saveTx === 'function' ? saveTx : null;
+    if (!_origSave) return;
+    window.saveTx = function () {
+      var isEdit   = (typeof editTxId !== 'undefined' && editTxId !== null);
+      var typeEl   = document.getElementById('tx-type') || document.querySelector('input[name="tx-type"]:checked');
+      var txType   = 'unknown';
+      // The type is set on the button with class 'on'
+      var ttOn = document.querySelector('.tt-btn.on');
+      if (ttOn) {
+        if (ttOn.id === 'tt-expense')  txType = 'expense';
+        if (ttOn.id === 'tt-income')   txType = 'income';
+        if (ttOn.id === 'tt-transfer') txType = 'transfer';
+      }
+      var amtEl  = document.getElementById('tx-amount');
+      var amount = amtEl ? parseFloat(amtEl.value) || 0 : 0;
+      // Call original first — if validation fails, no event fired
+      _origSave();
+      // Check if modal closed (means save succeeded)
+      var modalOpen = document.getElementById('mo-tx');
+      if (modalOpen && !modalOpen.classList.contains('vis')) {
+        track(isEdit ? 'transaction_edit' : 'transaction_add', Object.assign(appCtx(), {
+          transaction_type:   txType,
+          amount_range:       amount < 100 ? 'small' : amount < 1000 ? 'medium' : amount < 10000 ? 'large' : 'xlarge',
+          event_category:     'finance'
+        }));
+      }
+    };
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  ACCOUNT EVENTS
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _orig = typeof saveAcc === 'function' ? saveAcc : null;
+    if (!_orig) return;
+    window.saveAcc = function () {
+      var isEdit  = (typeof editAccId !== 'undefined' && editAccId !== null);
+      var typeEl  = document.getElementById('acc-type');
+      var accType = typeEl ? typeEl.value : 'unknown';
+      _orig();
+      var modal = document.getElementById('mo-acc');
+      if (modal && !modal.classList.contains('vis')) {
+        track('account_add', Object.assign(appCtx(), {
+          account_type:   accType,
+          is_edit:        isEdit ? 'yes' : 'no',
+          event_category: 'finance'
+        }));
+      }
+    };
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  BUDGET EVENTS
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _orig = typeof saveBud === 'function' ? saveBud : null;
+    if (!_orig) return;
+    window.saveBud = function () {
+      _orig();
+      var modal = document.getElementById('mo-bud');
+      if (modal && !modal.classList.contains('vis')) {
+        track('budget_set', Object.assign(appCtx(), { event_category: 'finance' }));
+      }
+    };
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  GOAL EVENTS
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _orig = typeof saveGoal === 'function' ? saveGoal : null;
+    if (!_orig) return;
+    window.saveGoal = function () {
+      var isEdit = (typeof editGoalId !== 'undefined' && editGoalId !== null);
+      _orig();
+      var modal = document.getElementById('mo-goal');
+      if (modal && !modal.classList.contains('vis')) {
+        track('goal_create', Object.assign(appCtx(), {
+          is_edit:        isEdit ? 'yes' : 'no',
+          event_category: 'finance'
+        }));
+      }
+    };
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  EXPORT / IMPORT EVENTS
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _origExp = typeof exportData === 'function' ? exportData : null;
+    if (_origExp) {
+      window.exportData = function () {
+        _origExp();
+        track('export_data', Object.assign(appCtx(), {
+          transaction_count: (typeof T !== 'undefined') ? T.length : 0,
+          event_category:    'data'
+        }));
+      };
+    }
+    var _origCsv = typeof exportCSV === 'function' ? exportCSV : null;
+    if (_origCsv) {
+      window.exportCSV = function () {
+        _origCsv();
+        track('export_csv', Object.assign(appCtx(), {
+          transaction_count: (typeof T !== 'undefined') ? T.length : 0,
+          event_category:    'data'
+        }));
+      };
+    }
+    var _origImp = typeof importData === 'function' ? importData : null;
+    if (_origImp) {
+      window.importData = function (e) {
+        _origImp(e);
+        track('import_data', Object.assign(appCtx(), { event_category: 'data' }));
+      };
+    }
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  PWA INSTALL EVENT
+  // ──────────────────────────────────────────────────────────
+  window.addEventListener('appinstalled', function () {
+    track('app_install', { event_category: 'pwa', method: 'browser_prompt' });
+  });
+
+  // ──────────────────────────────────────────────────────────
+  //  TUTORIAL EVENTS
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _origShow  = typeof showTutorial  === 'function' ? showTutorial  : null;
+    var _origClose = typeof closeTutorial === 'function' ? closeTutorial : null;
+    var _origNext  = typeof tutNext       === 'function' ? tutNext       : null;
+    if (_origShow) {
+      window.showTutorial = function () {
+        _origShow();
+        track('tutorial_start', Object.assign(appCtx(), { event_category: 'onboarding' }));
+      };
+    }
+    if (_origNext) {
+      window.tutNext = function () {
+        _origNext();
+        var step = (typeof tutStep !== 'undefined') ? tutStep : 0;
+        if (step >= 7) {
+          track('tutorial_complete', Object.assign(appCtx(), {
+            event_category: 'onboarding',
+            steps_completed: step
+          }));
+        }
+      };
+    }
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  THEME TOGGLE
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _orig = typeof toggleTheme === 'function' ? toggleTheme : null;
+    if (!_orig) return;
+    window.toggleTheme = function () {
+      _orig();
+      track('theme_toggle', {
+        new_theme:      document.body.classList.contains('light') ? 'light' : 'dark',
+        event_category: 'ui'
+      });
+    };
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  SEARCH USED
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var searchEl = document.getElementById('global-search');
+    if (!searchEl) return;
+    var searchTracked = false;
+    searchEl.addEventListener('input', function () {
+      if (!searchTracked && searchEl.value.length >= 3) {
+        searchTracked = true;
+        track('search_used', { event_category: 'engagement' });
+        // Reset after 5s so repeated searches count
+        setTimeout(function () { searchTracked = false; }, 5000);
+      }
+    });
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  COMMAND PALETTE USAGE
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var _orig = typeof cmdExec === 'function' ? cmdExec : null;
+    if (!_orig) return;
+    window.cmdExec = function (i) {
+      // Get command label before exec
+      var label = 'unknown';
+      try {
+        var items = document.querySelectorAll('.cmd-item');
+        if (items[i]) label = items[i].querySelector('.cmd-item-label').textContent;
+      } catch(e) {}
+      _orig(i);
+      track('command_used', {
+        command_name:   label,
+        event_category: 'engagement'
+      });
+    };
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  SCROLL DEPTH — 25%, 50%, 75%, 90%
+  //  Uses #content (the scrollable pane), not window
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var milestones = [25, 50, 75, 90];
+    var hit = {};
+    var contentEl = document.getElementById('content');
+    if (!contentEl) return;
+    contentEl.addEventListener('scroll', function () {
+      var scrollable = contentEl.scrollHeight - contentEl.clientHeight;
+      if (scrollable <= 0) return;
+      var pct = Math.round((contentEl.scrollTop / scrollable) * 100);
+      milestones.forEach(function (m) {
+        if (pct >= m && !hit[m]) {
+          hit[m] = true;
+          track('scroll_depth', {
+            percent:        m,
+            view:           (typeof currentView !== 'undefined') ? currentView : 'unknown',
+            event_category: 'engagement'
+          });
+        }
+      });
+    }, { passive: true });
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  TIME ON APP — 30s, 3min, 5min (only when tab is visible)
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var activeTime  = 0;       // ms actually visible
+    var lastVisible = null;    // timestamp when tab became visible
+    var milestones  = [30, 180, 300]; // seconds
+    var hit = {};
+
+    function onVisible() { lastVisible = Date.now(); }
+    function onHidden() {
+      if (lastVisible) {
+        activeTime += Date.now() - lastVisible;
+        lastVisible = null;
+      }
+      checkMilestones();
+    }
+    function checkMilestones() {
+      var totalSec = Math.floor((activeTime + (lastVisible ? Date.now() - lastVisible : 0)) / 1000);
+      milestones.forEach(function (s) {
+        if (totalSec >= s && !hit[s]) {
+          hit[s] = true;
+          track('time_on_app', {
+            seconds:        s,
+            event_category: 'engagement',
+            view:           (typeof currentView !== 'undefined') ? currentView : 'unknown'
+          });
+        }
+      });
+    }
+
+    document.addEventListener('visibilitychange', function () {
+      document.hidden ? onHidden() : onVisible();
+    });
+    if (!document.hidden) onVisible();
+    // Check every 10s
+    setInterval(checkMilestones, 10000);
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  FIRST VISIT  (fires once per new visitor)
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    try {
+      var LS = window.localStorage;
+      if (!LS.getItem('ff_ga_first')) {
+        LS.setItem('ff_ga_first', '1');
+        track('first_visit', {
+          event_category: 'onboarding',
+          has_data: (typeof A !== 'undefined' && A.length > 0) ? 'returning' : 'new'
+        });
+      }
+    } catch(e) {}
+  })();
+
+  // ──────────────────────────────────────────────────────────
+  //  INITIAL PAGE_VIEW for the landing view
+  // ──────────────────────────────────────────────────────────
+  (function () {
+    var view = (typeof currentView !== 'undefined') ? currentView : 'dashboard';
+    var meta = (typeof PAGE_META !== 'undefined' && PAGE_META[view]) ? PAGE_META[view] : {};
+    track('page_view', {
+      page_title:    (meta.title || 'Home') + ' — FinFlow',
+      page_location: location.href,
+      page_path:     '#' + view
+    });
+  })();
+
+})();
