@@ -69,6 +69,45 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
+
+  <!-- ═══════════════════════════════════════════════════════
+       Google Analytics 4 (GA4)
+       Replace G-XXXXXXXXXX with your Measurement ID from:
+       analytics.google.com → Admin → Data Streams → Web stream
+  ══════════════════════════════════════════════════════════ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LR1PK27CYZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    // Base config — disable file:// and localhost tracking to keep data clean
+    var _gaId = 'G-LR1PK27CYZ';
+    var _gaEnabled = (
+      location.protocol === 'https:' &&
+      location.hostname !== 'localhost' &&
+      location.hostname !== '127.0.0.1'
+    );
+
+    if (_gaEnabled) {
+      gtag('config', _gaId, {
+        // SPA config — manual page_view, no auto page_view on load
+        send_page_view: false,
+        // Custom dimensions (set in GA4 → Configure → Custom definitions)
+        custom_map: {
+          dimension1: 'app_theme',
+          dimension2: 'has_data'
+        }
+      });
+    }
+
+    // Safe gtag wrapper — no-ops when disabled (dev/localhost)
+    window._track = function(eventName, params) {
+      if (!_gaEnabled || typeof gtag !== 'function') return;
+      try { gtag('event', eventName, params || {}); } catch(e) {}
+    };
+  </script>
+
   <!-- External Dependencies -->
   <!-- Chart.js must load synchronously — app.js init depends on it -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
@@ -616,7 +655,7 @@
                 <div class="set-sec-hd"><i class="fa-solid fa-palette"></i> Appearance</div>
                 <div class="set-row">
                   <div class="set-row-info">
-                    <h4>Light Mode</h4>
+                    <h4>Dark Mode</h4>
                     <p>Switch between dark and light</p>
                   </div>
                   <label class="toggle"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span
@@ -628,10 +667,10 @@
                     <p>Your currency symbol</p>
                   </div>
                   <select id="s-currency" onchange="savePref()" style="width:110px;font-size:14px">
-                    <option value="₹">₹ Rupee</option>
                     <option value="$">$ Dollar</option>
                     <option value="€">€ Euro</option>
                     <option value="£">£ Pound</option>
+                    <option value="₹">₹ Rupee</option>
                     <option value="¥">¥ Yen</option>
                     <option value="₩">₩ Won</option>
                     <option value="Fr">Fr Franc</option>
@@ -821,7 +860,7 @@
       <!-- Step 1: Welcome -->
       <div class="tut-step active" id="tut-step-1">
         <span class="tut-emoji">👋</span>
-        <div class="tut-title">Welcome to FinFlow<br> <span class="tut-highlight"> By Researcher Tizar</span> </div>
+        <div class="tut-title">Welcome to FinFlow</div>
         <div class="tut-body">
           Your personal money tracker — simple, private, and completely free.<br><br>
           <strong>No account needed.</strong> Everything stays on <em>your device only</em>.
