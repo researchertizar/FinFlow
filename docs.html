@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FinFlow — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#5b52f0;--accent-h:#7c6ff7;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;
+  --bg:#0f0e13;--bg2:#16151c;--bg3:#1e1c27;--card:#1e1c27;
+  --fg:#f0eeff;--fg2:#c8c4e0;--fg3:#7a7696;
+  --bdr:rgba(255,255,255,.08);--r:10px;--r2:14px;--r3:18px;
+  --font:'Inter',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.6;min-height:100vh}
+a{color:var(--accent-h);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Layout */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:260px;background:var(--bg2);border-right:1px solid var(--bdr);
+  padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0}
+.main{flex:1;max-width:860px;padding:48px 40px;margin:0 auto}
+@media(max-width:768px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static;padding:16px 0}
+  .main{padding:28px 20px}
+}
+
+/* Sidebar */
+.sb-brand{display:flex;align-items:center;gap:10px;padding:0 20px 20px;
+  border-bottom:1px solid var(--bdr);margin-bottom:12px}
+.sb-logo{width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),#7c3aed);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0}
+.sb-name{font-weight:800;font-size:15px}
+.sb-ver{font-size:10px;color:var(--fg3)}
+.sb-sec{font-size:10px;font-weight:700;color:var(--fg3);text-transform:uppercase;
+  letter-spacing:.08em;padding:10px 20px 4px}
+.sb-link{display:flex;align-items:center;gap:9px;padding:8px 20px;
+  font-size:13px;color:var(--fg2);cursor:pointer;transition:all .15s;
+  border-left:2px solid transparent;text-decoration:none}
+.sb-link:hover{background:rgba(255,255,255,.04);color:var(--fg);text-decoration:none}
+.sb-link.active{color:var(--accent-h);border-left-color:var(--accent);background:rgba(91,82,240,.08)}
+.sb-link i{width:16px;text-align:center;font-size:12px;flex-shrink:0}
+
+/* Content */
+h1{font-size:32px;font-weight:900;letter-spacing:-.03em;margin-bottom:8px}
+h2{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:40px 0 12px;
+  padding-top:40px;border-top:1px solid var(--bdr)}
+h2:first-of-type{border-top:none;padding-top:0;margin-top:20px}
+h3{font-size:16px;font-weight:700;margin:24px 0 8px;color:var(--accent-h)}
+p{color:var(--fg2);margin-bottom:12px;font-size:14px}
+.lead{font-size:16px;color:var(--fg2);margin-bottom:28px}
+section{margin-bottom:60px}
+
+/* Cards */
+.card{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r2);padding:20px;margin-bottom:16px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px}
+.feat-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r2);padding:16px}
+.feat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:15px;margin-bottom:10px}
+.feat-card h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.feat-card p{font-size:12px;color:var(--fg3);margin:0}
+
+/* Steps */
+.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);
+  color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:2px}
+.step-body h4{font-size:14px;font-weight:700;margin-bottom:3px}
+.step-body p{font-size:13px;color:var(--fg3);margin:0}
+
+/* Tags / badges */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;
+  border-radius:20px;font-size:11px;font-weight:700}
+.badge.green{background:rgba(34,197,94,.15);color:var(--green)}
+.badge.amber{background:rgba(245,158,11,.15);color:var(--amber)}
+.badge.purple{background:rgba(91,82,240,.15);color:var(--accent-h)}
+.badge.red{background:rgba(239,68,68,.15);color:var(--red)}
+
+/* Tips */
+.tip{display:flex;gap:10px;align-items:flex-start;background:rgba(91,82,240,.08);
+  border:1px solid rgba(91,82,240,.2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px}
+.tip i{color:var(--accent-h);flex-shrink:0;margin-top:2px;font-size:13px}
+.tip p{font-size:13px;color:var(--fg2);margin:0}
+.warn{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2)}
+.warn i{color:var(--amber)}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px}
+th{text-align:left;padding:8px 12px;font-size:11px;font-weight:700;color:var(--fg3);
+  text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--bdr)}
+td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--fg2)}
+tr:last-child td{border-bottom:none}
+
+/* Kbd */
+kbd{background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;
+  padding:2px 7px;font-size:11px;font-family:monospace;color:var(--fg2)}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#5b52f0 0%,#7c3aed 100%);
+  border-radius:var(--r3);padding:32px 28px;margin-bottom:32px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;
+  border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}
+.hero h1{color:#fff;margin-bottom:6px}
+.hero .lead{color:rgba(255,255,255,.85);margin-bottom:16px}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px}
+.hero-badge{background:rgba(255,255,255,.18);color:#fff;padding:4px 12px;
+  border-radius:20px;font-size:12px;font-weight:600;backdrop-filter:blur(4px)}
+
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:32px}
+.toc-item{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);
+  padding:12px 14px;text-decoration:none;color:var(--fg2);font-size:13px;
+  display:flex;align-items:center;gap:8px;transition:all .15s}
+.toc-item:hover{border-color:var(--accent);color:var(--accent-h);background:rgba(91,82,240,.08);text-decoration:none}
+.toc-item i{width:16px;text-align:center;font-size:12px}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo"><i class="fa-solid fa-chart-line"></i></div>
+    <div><div class="sb-name">FinFlow</div><div class="sb-ver">v3.2 Documentation</div></div>
+  </div>
+  <div class="sb-sec">Getting Started</div>
+  <a class="sb-link active" href="#overview"><i class="fa-solid fa-house"></i> Overview</a>
+  <a class="sb-link" href="#onboarding"><i class="fa-solid fa-rocket"></i> Onboarding</a>
+  <a class="sb-link" href="#modes"><i class="fa-solid fa-sliders"></i> Experience Modes</a>
+  <div class="sb-sec">Core Features</div>
+  <a class="sb-link" href="#dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+  <a class="sb-link" href="#transactions"><i class="fa-solid fa-list-ul"></i> Transactions</a>
+  <a class="sb-link" href="#accounts"><i class="fa-solid fa-vault"></i> Accounts</a>
+  <a class="sb-link" href="#budget"><i class="fa-solid fa-scale-balanced"></i> Budgets</a>
+  <a class="sb-link" href="#goals"><i class="fa-solid fa-bullseye"></i> Goals</a>
+  <a class="sb-link" href="#recurring"><i class="fa-solid fa-rotate"></i> Recurring</a>
+  <a class="sb-link" href="#categories"><i class="fa-solid fa-tags"></i> Categories</a>
+  <div class="sb-sec">Analytics</div>
+  <a class="sb-link" href="#reports"><i class="fa-solid fa-chart-bar"></i> Reports</a>
+  <a class="sb-link" href="#insights"><i class="fa-solid fa-lightbulb"></i> Insights</a>
+  <div class="sb-sec">Tools</div>
+  <a class="sb-link" href="#converters"><i class="fa-solid fa-calculator"></i> Converters</a>
+  <div class="sb-sec">Settings</div>
+  <a class="sb-link" href="#profile"><i class="fa-solid fa-user"></i> Profile</a>
+  <a class="sb-link" href="#settings"><i class="fa-solid fa-gear"></i> Settings</a>
+  <a class="sb-link" href="#data"><i class="fa-solid fa-database"></i> Data & Privacy</a>
+  <a class="sb-link" href="#shortcuts"><i class="fa-solid fa-keyboard"></i> Shortcuts</a>
+  <div class="sb-sec">Reference</div>
+  <a class="sb-link" href="#pwa"><i class="fa-solid fa-mobile-screen"></i> Install as App</a>
+  <a class="sb-link" href="#faq"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+</nav>
+
+<!-- Main content -->
+<main class="main">
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>FinFlow Documentation</h1>
+    <p class="lead">Complete guide to every feature, element and workflow in FinFlow — your private, offline-first personal finance manager.</p>
+    <div class="hero-badges">
+      <span class="hero-badge"><i class="fa-solid fa-lock"></i> 100% Private</span>
+      <span class="hero-badge"><i class="fa-solid fa-wifi-slash"></i> Works Offline</span>
+      <span class="hero-badge"><i class="fa-solid fa-mobile-screen"></i> PWA Ready</span>
+      <span class="hero-badge">v3.2.0</span>
+    </div>
+  </div>
+
+  <!-- Quick nav -->
+  <div class="toc-grid">
+    <a class="toc-item" href="#dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    <a class="toc-item" href="#transactions"><i class="fa-solid fa-list-ul"></i> Transactions</a>
+    <a class="toc-item" href="#accounts"><i class="fa-solid fa-vault"></i> Accounts</a>
+    <a class="toc-item" href="#budget"><i class="fa-solid fa-scale-balanced"></i> Budgets</a>
+    <a class="toc-item" href="#goals"><i class="fa-solid fa-bullseye"></i> Goals</a>
+    <a class="toc-item" href="#recurring"><i class="fa-solid fa-rotate"></i> Recurring</a>
+    <a class="toc-item" href="#categories"><i class="fa-solid fa-tags"></i> Categories</a>
+    <a class="toc-item" href="#reports"><i class="fa-solid fa-chart-bar"></i> Reports</a>
+    <a class="toc-item" href="#insights"><i class="fa-solid fa-lightbulb"></i> Insights</a>
+    <a class="toc-item" href="#converters"><i class="fa-solid fa-calculator"></i> Converters</a>
+    <a class="toc-item" href="#shortcuts"><i class="fa-solid fa-keyboard"></i> Shortcuts</a>
+    <a class="toc-item" href="#faq"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+  </div>
+
+  <!-- Overview -->
+  <section id="overview">
+    <h2><i class="fa-solid fa-house" style="color:var(--accent-h);margin-right:8px"></i>Overview</h2>
+    <p>FinFlow is a personal finance OS that runs entirely in your browser. There is no server, no account, no sync. All data is stored in your browser's <strong>localStorage</strong> — it never leaves your device.</p>
+    <div class="card-grid">
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(34,197,94,.15);color:var(--green)"><i class="fa-solid fa-lock"></i></div>
+        <h4>Fully Private</h4>
+        <p>No login. No cloud. No tracking. Your financial data stays on your device only.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(91,82,240,.15);color:var(--accent-h)"><i class="fa-solid fa-wifi-slash"></i></div>
+        <h4>Offline First</h4>
+        <p>Install as a PWA and use it without internet. Currency rates are cached for 6 hours.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(245,158,11,.15);color:var(--amber)"><i class="fa-solid fa-bolt"></i></div>
+        <h4>Instant</h4>
+        <p>No loading screens. Record a transaction in under 5 seconds.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(236,72,153,.15);color:#ec4899"><i class="fa-solid fa-sliders"></i></div>
+        <h4>Three Modes</h4>
+        <p>Simple, Standard, or Pro — the UI adapts to your experience level.</p>
+      </div>
+    </div>
+    <div class="tip"><i class="fa-solid fa-circle-info"></i><p>Go to <strong>Settings → App &amp; Install → Load Sample Data</strong> to explore FinFlow with realistic demo data before entering your own.</p></div>
+  </section>
+
+  <!-- Onboarding -->
+  <section id="onboarding">
+    <h2><i class="fa-solid fa-rocket" style="color:var(--accent-h);margin-right:8px"></i>Onboarding</h2>
+    <p>On your first visit, FinFlow shows a welcome screen to set up your profile in 30 seconds.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Enter your name</h4><p>Optional — used for the dashboard greeting ("Good morning, Alex!"). Stored locally only.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Choose your currency</h4><p>Defaults to ₹ (Indian Rupee). 45+ currencies available. Change anytime in Settings.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Pick experience level</h4><p>Simple, Standard or Pro — controls which features and labels are shown throughout the app.</p></div></div>
+    </div>
+    <div class="tip warn"><i class="fa-solid fa-triangle-exclamation"></i><p>If you dismiss onboarding, you can re-open it by clearing site data in your browser, or change all settings under <strong>Settings → Profile</strong>.</p></div>
+  </section>
+
+  <!-- Experience Modes -->
+  <section id="modes">
+    <h2><i class="fa-solid fa-sliders" style="color:var(--accent-h);margin-right:8px"></i>Experience Modes</h2>
+    <p>FinFlow has three modes that change the vocabulary, visible features, and UI density. Switch anytime in <strong>Settings → Profile → Experience Mode</strong>.</p>
+    <table>
+      <tr><th>Feature</th><th>🌱 Simple</th><th>📊 Standard</th><th>⚡ Pro</th></tr>
+      <tr><td>Navigation items</td><td>Home, Activity, Accounts, Budget</td><td>All + Reports, Insights, Recurring, Categories</td><td>All + Goals</td></tr>
+      <tr><td>Transaction labels</td><td>Spent Money / Got Paid / Move Money</td><td>Spent Money / Got Paid / Move Money</td><td>Expense / Income / Transfer</td></tr>
+      <tr><td>Modal fields</td><td>Essential only</td><td>+ Notes, rollover budget</td><td>+ Tags, color pickers, target dates</td></tr>
+      <tr><td>Dashboard cards</td><td>2 (Income, Expenses)</td><td>4 (all)</td><td>4 (all)</td></tr>
+      <tr><td>Help strips in modals</td><td>Hidden</td><td>Shown</td><td>Compact</td></tr>
+    </table>
+  </section>
+
+  <!-- Dashboard -->
+  <section id="dashboard">
+    <h2><i class="fa-solid fa-gauge" style="color:var(--accent-h);margin-right:8px"></i>Dashboard</h2>
+    <p>The dashboard is your financial snapshot for the current month. Use the month navigation arrows to browse history.</p>
+    <h3>Profile Header</h3>
+    <p>If you've set your name, a greeting appears at the top ("Good morning, Tizar!") with your avatar. Tap the avatar to go to Settings. The greeting updates automatically based on time of day.</p>
+    <h3>Balance Hero</h3>
+    <p>The large number shows your <strong>Total Net Worth</strong> — sum of all account balances. The arrow indicator shows change vs the previous month.</p>
+    <h3>Stat Cards</h3>
+    <p>Four cards show this month's <strong>Income</strong>, <strong>Expenses</strong>, <strong>Net Savings</strong>, and <strong>Transaction count</strong> — each with a vs-last-month comparison.</p>
+    <h3>Charts</h3>
+    <p><strong>Where Money Goes</strong> — donut chart breaking down expenses by category.<br><strong>Last 6 Months</strong> — area chart showing income vs expense trends.</p>
+    <h3>Recent Activity</h3>
+    <p>Last 5 transactions. Tap "See All" to go to the full Transactions view.</p>
+    <h3>Budget Status + Goals</h3>
+    <p>Quick overview of your budgets and savings goals. Tap "Manage" or "All Goals" to drill in.</p>
+    <h3>Quick Action Buttons</h3>
+    <p>Spent Money, Got Paid, Move Money, and Reports — one tap to the most common actions.</p>
+    <div class="tip"><i class="fa-solid fa-circle-info"></i><p>The <strong>Welcome Card</strong> appears on the dashboard when you have no accounts or transactions yet. Tap the 3 steps to get started quickly.</p></div>
+  </section>
+
+  <!-- Transactions -->
+  <section id="transactions">
+    <h2><i class="fa-solid fa-list-ul" style="color:var(--accent-h);margin-right:8px"></i>Transactions</h2>
+    <p>Every financial event is a transaction. There are three types:</p>
+    <table>
+      <tr><th>Type</th><th>When to use</th><th>Example</th></tr>
+      <tr><td><span class="badge red">Expense</span></td><td>Money going out</td><td>Groceries, rent, fuel, subscriptions</td></tr>
+      <tr><td><span class="badge green">Income</span></td><td>Money coming in</td><td>Salary, freelance, gifts, refunds</td></tr>
+      <tr><td><span class="badge purple">Transfer</span></td><td>Moving between your own accounts</td><td>Savings deposit, credit card payment</td></tr>
+    </table>
+    <h3>Adding a Transaction</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Tap + Add or the circle button</h4><p>Available from topbar, dashboard quick buttons, or bottom navigation.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Choose the type</h4><p>Spent Money / Got Paid / Move Money (or Expense / Income / Transfer in Pro mode).</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Enter amount</h4><p>Type the amount or use the quick-chips (10, 50, 100, 500, 1000, 5000).</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Fill in details</h4><p>Description, date, category, and account. All required except description.</p></div></div>
+    </div>
+    <h3>Filters</h3>
+    <p>Filter by type, category, account, or keyword. Sort newest/oldest/largest/smallest. Filters apply instantly.</p>
+    <h3>Export</h3>
+    <p>Tap <strong>CSV</strong> to download all transactions as a spreadsheet. Use <strong>Settings → Export Backup</strong> for full JSON backup.</p>
+  </section>
+
+  <!-- Accounts -->
+  <section id="accounts">
+    <h2><i class="fa-solid fa-vault" style="color:var(--accent-h);margin-right:8px"></i>Accounts</h2>
+    <p>An account is any place you keep money. Add one account per real-world account you want to track.</p>
+    <table>
+      <tr><th>Type</th><th>Use for</th></tr>
+      <tr><td>🏦 Bank Account</td><td>Everyday current/checking account</td></tr>
+      <tr><td>🐷 Savings Account</td><td>Savings deposits, FDs, recurring deposits</td></tr>
+      <tr><td>💳 Credit Card</td><td>Enter current balance as negative (e.g. -8000 = owed ₹8,000)</td></tr>
+      <tr><td>📈 Investment</td><td>Stocks, mutual funds, crypto</td></tr>
+      <tr><td>💵 Cash / Wallet</td><td>Physical cash in hand or digital wallets (UPI, PayTM)</td></tr>
+      <tr><td>🏠 Loan</td><td>Home loan, car loan, personal loan — enter as negative</td></tr>
+    </table>
+    <h3>Account Detail</h3>
+    <p>Tap any account card to see a running balance ledger — all transactions for that account with a running total after each entry.</p>
+    <div class="tip"><i class="fa-solid fa-circle-info"></i><p>For <strong>credit cards</strong>, enter the starting balance as a negative number. As you record expense transactions, FinFlow tracks what you owe. Record a Transfer from your bank when you pay the bill.</p></div>
+  </section>
+
+  <!-- Budgets -->
+  <section id="budget">
+    <h2><i class="fa-solid fa-scale-balanced" style="color:var(--accent-h);margin-right:8px"></i>Budgets</h2>
+    <p>A budget is a monthly spending limit for a category. FinFlow shows you a progress bar and alerts you when you're getting close.</p>
+    <h3>Budget Status Colors</h3>
+    <table>
+      <tr><th>Color</th><th>Meaning</th></tr>
+      <tr><td><span class="badge green">Green</span></td><td>On track — spending is within budget</td></tr>
+      <tr><td><span class="badge amber">Amber / Striped</span></td><td>Warning — you've used 80%+ of budget</td></tr>
+      <tr><td><span class="badge red">Red</span></td><td>Over budget — spending exceeds the limit</td></tr>
+    </table>
+    <h3>Rollover (Standard/Pro mode)</h3>
+    <p>Enable "Roll over unused budget" to carry forward unspent money to next month's limit. E.g. if you budget ₹5,000 for dining and spend ₹3,000, next month's budget becomes ₹7,000.</p>
+    <div class="tip"><i class="fa-solid fa-circle-info"></i><p>Budget progress is calculated for the <strong>currently selected month</strong> — use the month navigator arrows in the topbar to review past months.</p></div>
+  </section>
+
+  <!-- Goals -->
+  <section id="goals">
+    <h2><i class="fa-solid fa-bullseye" style="color:var(--accent-h);margin-right:8px"></i>Savings Goals</h2>
+    <p>Goals track progress toward a financial target — a vacation fund, emergency reserve, new device, or anything you're saving for.</p>
+    <h3>Creating a Goal</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Name your goal</h4><p>"Emergency Fund", "Trip to Goa", "New Laptop" — be specific.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Set the target amount</h4><p>How much total you need to reach this goal.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Enter saved so far</h4><p>If you've already saved some amount toward this goal, enter it here.</p></div></div>
+    </div>
+    <p>FinFlow sends an alert when you reach 75% and again at 100% of your goal. Goals are visible on the dashboard and in the Goals view.</p>
+    <div class="tip"><i class="fa-solid fa-circle-info"></i><p>Goals are <strong>Pro mode only</strong> by default. Enable them by switching to Pro mode in Settings → Profile → Experience Mode.</p></div>
+  </section>
+
+  <!-- Recurring -->
+  <section id="recurring">
+    <h2><i class="fa-solid fa-rotate" style="color:var(--accent-h);margin-right:8px"></i>Recurring</h2>
+    <p>Recurring items are regular payments or income — subscriptions, EMIs, rent, salary. FinFlow tracks when they're due and alerts you.</p>
+    <h3>Frequency Options</h3>
+    <table>
+      <tr><th>Option</th><th>Interval</th></tr>
+      <tr><td>Daily</td><td>Every day</td></tr>
+      <tr><td>Weekly</td><td>Every 7 days</td></tr>
+      <tr><td>Fortnightly</td><td>Every 14 days</td></tr>
+      <tr><td>Monthly</td><td>Same date each month</td></tr>
+      <tr><td>Every 3 months</td><td>Quarterly</td></tr>
+      <tr><td>Every 6 months</td><td>Half-yearly</td></tr>
+      <tr><td>Yearly</td><td>Annual</td></tr>
+    </table>
+    <h3>Monthly Overview Panel</h3>
+    <p>The right panel shows the total monthly cost of all your recurring items (adjusted for frequency — a yearly payment is divided by 12).</p>
+    <h3>Alerts</h3>
+    <p>FinFlow alerts you when a recurring item is <strong>overdue</strong> (past due date) or <strong>due within 3 days</strong>. Check the bell icon in the topbar.</p>
+  </section>
+
+  <!-- Categories -->
+  <section id="categories">
+    <h2><i class="fa-solid fa-tags" style="color:var(--accent-h);margin-right:8px"></i>Categories</h2>
+    <p>Categories are labels for your transactions. They power the budget system, reports, and insights.</p>
+    <p>FinFlow seeds 11 default categories on first launch: Groceries, Dining Out, Transport, Utilities, Entertainment, Health, Shopping, Rent, Salary, Freelance, and Transfer.</p>
+    <h3>Creating a Custom Category</h3>
+    <p>Tap <strong>Add</strong> in the Categories view. Choose a name, type (expense or income), color, and icon. Once created, it appears in all transaction and budget dropdowns.</p>
+    <div class="tip warn"><i class="fa-solid fa-triangle-exclamation"></i><p>Deleting a category will not delete transactions in that category — they'll show as "Uncategorized". Reassign them first if needed.</p></div>
+  </section>
+
+  <!-- Reports -->
+  <section id="reports">
+    <h2><i class="fa-solid fa-chart-bar" style="color:var(--accent-h);margin-right:8px"></i>Reports</h2>
+    <p>Reports give you deep analysis of your financial data across five tabs:</p>
+    <table>
+      <tr><th>Tab</th><th>Shows</th></tr>
+      <tr><td>Overview</td><td>Income vs expenses bar chart + spending breakdown donut + category table</td></tr>
+      <tr><td>Spending</td><td>Top spending categories + daily spending pattern</td></tr>
+      <tr><td>Income</td><td>Income sources breakdown + income trend over time</td></tr>
+      <tr><td>Cash Flow</td><td>12-month income/expense/net savings bar chart</td></tr>
+      <tr><td>Net Worth</td><td>Historical net worth line chart</td></tr>
+    </table>
+    <p>All reports are filtered by the <strong>currently selected month</strong>. Tap <strong>Print</strong> to print or save as PDF.</p>
+  </section>
+
+  <!-- Insights -->
+  <section id="insights">
+    <h2><i class="fa-solid fa-lightbulb" style="color:var(--accent-h);margin-right:8px"></i>Insights</h2>
+    <p>Insights automatically analyze your spending patterns and surface personalized recommendations. They run on your local data — nothing is sent anywhere.</p>
+    <p>Example insights: "Dining Out spending increased 40% vs last month", "You saved 28% of income this month — great job!", "Utilities are 12% of your expenses — above average."</p>
+  </section>
+
+  <!-- Converters -->
+  <section id="converters">
+    <h2><i class="fa-solid fa-calculator" style="color:var(--accent-h);margin-right:8px"></i>Converters &amp; Tools</h2>
+    <p>A set of everyday calculators, all working offline with optional live data.</p>
+    <div class="card-grid">
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(34,197,94,.15);color:var(--green)"><i class="fa-solid fa-coins"></i></div>
+        <h4>Currency Converter</h4>
+        <p>Live rates via open API, cached 6 hours for offline use. 30+ currencies. Status shown below result.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(91,82,240,.15);color:var(--accent-h)"><i class="fa-solid fa-ruler"></i></div>
+        <h4>Unit Converter</h4>
+        <p>10 categories: length, weight, temperature, area, volume, speed, data, time, energy, pressure. 80+ units.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(245,158,11,.15);color:var(--amber)"><i class="fa-solid fa-house"></i></div>
+        <h4>Finance Calculators</h4>
+        <p>EMI/loan, SIP investment returns, simple &amp; compound interest — all with rupee formatting.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(236,72,153,.15);color:#ec4899"><i class="fa-solid fa-hashtag"></i></div>
+        <h4>Number Tools</h4>
+        <p>Decimal/binary/hex/octal converter, percentage calculator (X% of Y, A→B change %), GST calculator (add/remove, CGST/SGST split).</p>
+      </div>
+    </div>
+    <h3>Currency Rate Source</h3>
+    <p>Rates are fetched from <code>@fawazahmed0/currency-api</code> (free, no API key, hosted on jsDelivr CDN). Rates update every ~24 hours at the source. FinFlow caches them for 6 hours in localStorage. When offline, the last cached rates are used with an amber "Offline — approximate rates" indicator.</p>
+  </section>
+
+  <!-- Profile -->
+  <section id="profile">
+    <h2><i class="fa-solid fa-user" style="color:var(--accent-h);margin-right:8px"></i>Profile</h2>
+    <p>Your profile is stored locally and used to personalize the dashboard greeting and avatar.</p>
+    <table>
+      <tr><th>Field</th><th>Usage</th></tr>
+      <tr><td>Name</td><td>Dashboard greeting: "Good morning, Tizar!"</td></tr>
+      <tr><td>Role / Occupation</td><td>Subtitle under greeting: "Personal Finance Manager"</td></tr>
+      <tr><td>Avatar Color</td><td>Tap the avatar circle to cycle through 10 colors</td></tr>
+      <tr><td>Experience Mode</td><td>Simple / Standard / Pro — changes UI depth globally</td></tr>
+    </table>
+    <p>All profile data is stored in localStorage key <code>ff_pr</code> and never leaves your device.</p>
+  </section>
+
+  <!-- Settings -->
+  <section id="settings">
+    <h2><i class="fa-solid fa-gear" style="color:var(--accent-h);margin-right:8px"></i>Settings</h2>
+    <table>
+      <tr><th>Setting</th><th>Description</th></tr>
+      <tr><td>Light Mode</td><td>Toggle between dark (default) and light theme</td></tr>
+      <tr><td>Currency</td><td>Symbol shown throughout the app (₹ default). 30+ options.</td></tr>
+      <tr><td>Date Format</td><td>MM/DD/YYYY, DD/MM/YYYY, or YYYY-MM-DD</td></tr>
+      <tr><td>Export Backup</td><td>Download all data (accounts, transactions, budgets, goals, categories) as JSON</td></tr>
+      <tr><td>Export CSV</td><td>Download transactions as a spreadsheet</td></tr>
+      <tr><td>Restore Backup</td><td>Import a previously exported JSON file</td></tr>
+      <tr><td>Storage Used</td><td>Visual bar showing localStorage usage vs 5MB browser limit</td></tr>
+      <tr><td>Install as App</td><td>Add to home screen (Android) or use the guide for iOS</td></tr>
+      <tr><td>Load Sample Data</td><td>Replace all data with realistic demo content for exploration</td></tr>
+      <tr><td>Erase All Data</td><td>Permanently delete everything — accounts, transactions, all data</td></tr>
+    </table>
+  </section>
+
+  <!-- Data & Privacy -->
+  <section id="data">
+    <h2><i class="fa-solid fa-database" style="color:var(--accent-h);margin-right:8px"></i>Data &amp; Privacy</h2>
+    <p>FinFlow is designed from the ground up to be private. Here's exactly what data exists and where:</p>
+    <table>
+      <tr><th>Data</th><th>Stored where</th><th>Sent to server?</th></tr>
+      <tr><td>Accounts, transactions, budgets, goals</td><td>localStorage: <code>ff_accounts</code>, <code>ff_tx</code>, etc.</td><td>Never</td></tr>
+      <tr><td>Preferences (currency, theme, mode)</td><td>localStorage: <code>ff_pr</code></td><td>Never</td></tr>
+      <tr><td>Currency exchange rates</td><td>localStorage: <code>ff_fx_v1</code></td><td>Fetched from jsDelivr CDN (rate request only, no personal data)</td></tr>
+      <tr><td>Service Worker cache</td><td>Browser cache storage</td><td>Never</td></tr>
+    </table>
+    <div class="tip"><i class="fa-solid fa-circle-info"></i><p>Clearing your browser's site data or using "Erase All Data" in Settings will permanently delete everything. Always export a backup first.</p></div>
+  </section>
+
+  <!-- Shortcuts -->
+  <section id="shortcuts">
+    <h2><i class="fa-solid fa-keyboard" style="color:var(--accent-h);margin-right:8px"></i>Keyboard Shortcuts</h2>
+    <p>All shortcuts use <kbd>Alt</kbd>+key to avoid clashing with browser shortcuts.</p>
+    <table>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+      <tr><td><kbd>1</kbd> – <kbd>9</kbd>, <kbd>0</kbd></td><td>Navigate views (1=Dashboard, 2=Transactions … 0=Settings)</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>N</kbd></td><td>New transaction</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>A</kbd></td><td>New account</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>F</kbd></td><td>Focus search</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>K</kbd></td><td>Command palette</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>B</kbd></td><td>Toggle sidebar</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>T</kbd></td><td>Toggle theme</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>H</kbd></td><td>Keyboard shortcuts panel</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>←</kbd> / <kbd>→</kbd></td><td>Previous / next month</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Close modal / palette / sidebar (in order)</td></tr>
+    </table>
+  </section>
+
+  <!-- PWA -->
+  <section id="pwa">
+    <h2><i class="fa-solid fa-mobile-screen" style="color:var(--accent-h);margin-right:8px"></i>Install as App (PWA)</h2>
+    <h3>Android / Chrome</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Open FinFlow in Chrome</h4><p>Navigate to the URL in Chrome for Android.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Tap the Install button</h4><p>Go to Settings → App &amp; Install → Install as App, or tap the install prompt in the browser bar.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Add to home screen</h4><p>FinFlow installs like a native app with its own icon and no browser chrome.</p></div></div>
+    </div>
+    <h3>iOS / Safari</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Open in Safari</h4><p>iOS only supports PWA install through Safari, not Chrome.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Tap the Share button</h4><p>The box-with-arrow icon at the bottom of the screen.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Tap "Add to Home Screen"</h4><p>FinFlow appears on your home screen and runs in full-screen mode.</p></div></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2><i class="fa-solid fa-circle-question" style="color:var(--accent-h);margin-right:8px"></i>FAQ</h2>
+    <h3>Will I lose my data if I clear the browser?</h3>
+    <p>Yes. FinFlow stores data in localStorage, which is cleared when you clear site data. Always export a backup first via <strong>Settings → Export Backup</strong>.</p>
+    <h3>Can I use FinFlow on multiple devices?</h3>
+    <p>Data doesn't sync between devices — it's local-only by design. You can export a JSON backup on one device and import it on another.</p>
+    <h3>Why is the currency rate wrong?</h3>
+    <p>Rates are fetched from a free open API and cached for 6 hours. They're close approximations, not guaranteed live rates. For precise conversions, use a bank or financial service.</p>
+    <h3>What's the storage limit?</h3>
+    <p>Browsers typically allow 5–10MB of localStorage per origin. FinFlow displays current usage in Settings. At 5,000 transactions with all fields, usage is approximately 2–3MB.</p>
+    <h3>How do I reset and start fresh?</h3>
+    <p>Go to <strong>Settings → Erase All Data</strong>. This permanently deletes everything. Alternatively, clear site data in your browser's privacy settings.</p>
+    <h3>Is there a web or desktop version?</h3>
+    <p>FinFlow is a web app that works in any modern browser. Install it as a PWA for a near-native experience on both mobile and desktop.</p>
+    <h3>Can I add my own categories?</h3>
+    <p>Yes — go to <strong>Categories → Add</strong>. Custom categories appear in all transaction and budget dropdowns immediately.</p>
+  </section>
+
+  <div style="margin-top:60px;padding-top:24px;border-top:1px solid var(--bdr);text-align:center;color:var(--fg3);font-size:12px">
+    FinFlow v3.2.0 — Built by Researcher Tizar &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; No account, no cloud, no tracking
+  </div>
+
+</main>
+</div>
+
+<script>
+// Active sidebar link on scroll
+var links = document.querySelectorAll('.sb-link[href^="#"]');
+function setActive() {
+  var scrollY = window.scrollY + 100;
+  var active  = null;
+  document.querySelectorAll('section[id]').forEach(function(s) {
+    if (s.offsetTop <= scrollY) active = s.id;
+  });
+  links.forEach(function(l) {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + active);
+  });
+}
+window.addEventListener('scroll', setActive);
+setActive();
+</script>
+</body>
+</html>
