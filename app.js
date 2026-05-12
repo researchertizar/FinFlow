@@ -22,6 +22,8 @@
 
 "use strict";
 
+var FINFLOW_VERSION = "3.3.1"; /* bump this on every deploy */
+
 /* =================================================================
    SECTION 1 — WRAPPER LAYER
 ================================================================= */
@@ -4276,7 +4278,43 @@ function seedData() {
   // Re-apply after nav renders (for dynamically created buttons)
   var _origNavRender = window.navRender;
   window._applyRippleAfterNav = applyRipples;
-})();
+})()
+/* ── showUpdateBanner: non-intrusive update notification ── */
+function showUpdateBanner(version) {
+  // Don't show twice
+  if (document.getElementById("ff-update-banner")) return;
+
+  var banner = document.createElement("div");
+  banner.id = "ff-update-banner";
+  banner.innerHTML =
+    "<span><i class='fa-solid fa-sparkles'></i> FinFlow updated" +
+    (version ? " — v" + version : "") +
+    ". <strong>Reload to get the latest.</strong></span>" +
+    "<div style='display:flex;gap:6px;flex-shrink:0'>" +
+    "<button onclick='applyUpdate()' style='background:#fff;color:#1a1916;border:none;" +
+    "padding:5px 14px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;" +
+    "font-family:inherit;letter-spacing:-.01em'>Reload</button>" +
+    "<button onclick=\"document.getElementById('ff-update-banner').remove()\" " +
+    "style='background:rgba(255,255,255,.15);color:#fff;border:none;padding:5px 10px;" +
+    "border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit'>Later</button>" +
+    "</div>";
+  document.body.appendChild(banner);
+}
+
+/* ── applyUpdate: tell new SW to activate, then reload ── */
+function applyUpdate() {
+  if (!("serviceWorker" in navigator)) { window.location.reload(); return; }
+  navigator.serviceWorker.ready.then(function (reg) {
+    if (reg.waiting) {
+      /* Tell the waiting SW to skip waiting — triggers controllerchange → reload */
+      reg.waiting.postMessage({ type: "SKIP_WAITING" });
+    } else {
+      window.location.reload();
+    }
+  });
+}
+
+;
 
 // ══════════════════════════════════════════════
 //  PWA
@@ -4308,12 +4346,41 @@ function seedData() {
 // ══ SERVICE WORKER ══
 (function () {
   if (!("serviceWorker" in navigator)) return;
-  // Use external sw.js when served over HTTP (production)
+
+  /* ── Listen for SW update messages ── */
+  navigator.serviceWorker.addEventListener("message", function (e) {
+    if (e.data && e.data.type === "SW_UPDATED") {
+      showUpdateBanner(e.data.version);
+    }
+  });
+
   if (location.protocol !== "file:") {
     navigator.serviceWorker
       .register("./sw.js", { scope: "./" })
-      .then(function (r) {
-        console.log("[FinFlow] SW registered, scope:", r.scope);
+      .then(function (reg) {
+        console.log("[FinFlow] SW registered v" + FINFLOW_VERSION);
+
+        /* Check for a waiting (new) SW — happens when user has old tab open */
+        if (reg.waiting) {
+          showUpdateBanner();
+        }
+
+        /* A new SW was found and is installing */
+        reg.addEventListener("updatefound", function () {
+          var newSW = reg.installing;
+          newSW.addEventListener("statechange", function () {
+            /* New SW installed and waiting to activate */
+            if (newSW.state === "installed" && navigator.serviceWorker.controller) {
+              showUpdateBanner();
+            }
+          });
+        });
+
+        /* Detect controller change = new SW took over = reload to get new files */
+        var refreshing = false;
+        navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (!refreshing) { refreshing = true; window.location.reload(); }
+        });
       })
       .catch(function (e) {
         console.warn("[FinFlow] SW failed:", e.message);
@@ -4323,7 +4390,7 @@ function seedData() {
   // Fallback: inline blob SW for file:// opening
   var pageUrl = location.href.replace(/#.*$/, "");
   var swCode = [
-    "var CACHE_NAME = 'finflow-v3.5';",
+    "var CACHE_NAME = 'finflow-" + FINFLOW_VERSION + "';",
     "var URLS_TO_CACHE = ['" + pageUrl + "'];",
     "self.addEventListener('install', function(e) {",
     "  e.waitUntil(caches.open(CACHE_NAME).then(function(cache) {",
